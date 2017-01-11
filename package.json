@@ -3,5 +3,17 @@
   "version": "0.0.1",
   "repository": "https://github.com/findify/findify-feedback-js.git",
   "author": "1ven",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/mocha": "^2.2.37",
+    "cross-env": "^3.1.4",
+    "expect": "^1.20.2",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.5.4",
+    "ts-loader": "^1.3.3",
+    "ts-node": "^2.0.0",
+    "tslint": "^4.3.1",
+    "typescript": "^2.1.4",
+    "webpack": "^1.14.0"
+  }
 }
