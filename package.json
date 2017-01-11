@@ -7,7 +7,7 @@
     "lint": "tslint --project .",
     "check": "npm run test && npm run build && npm run lint && npm run clean",
     "test": "mocha --compilers ts:ts-node/register --recursive -R min  ./__tests__",
-    "build:commonjs": "tsc --project .",
+    "build:commonjs": "tsc --project . && cpx './src/env/*.js' ./lib/env",
     "build:umd": "cross-env NODE_ENV=development webpack src/index.ts dist/findify-feedback.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack src/index.ts dist/findify-feedback.min.js",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
@@ -26,6 +26,7 @@
   "repository": "https://github.com/findify/findify-feedback.git",
   "dependencies": {
     "@types/mocha": "^2.2.37",
+    "cpx": "^1.5.0",
     "cross-env": "^3.1.4",
     "expect": "^1.20.2",
     "mocha": "^3.2.0",
