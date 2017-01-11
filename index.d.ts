@@ -1,4 +1,4 @@
-declare module "@findify/findify-feedback-js" {
+declare module "@findify/findify-feedback" {
   type User = {
     uid: string,
     sid: string,
