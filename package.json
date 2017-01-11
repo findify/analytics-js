@@ -1,9 +1,29 @@
 {
-  "name": "@findify/findify-feedback-js",
+  "name": "@findify/findify-feedback",
   "version": "0.0.1",
-  "repository": "https://github.com/findify/findify-feedback-js.git",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "rimraf ./lib ./dist",
+    "lint": "tslint --project .",
+    "check": "npm run test && npm run build && npm run lint && npm run clean",
+    "test": "mocha --compilers ts:ts-node/register --recursive -R min  ./__tests__",
+    "build:commonjs": "tsc --project .",
+    "build:umd": "cross-env NODE_ENV=development webpack src/index.ts dist/findify-feedback.js",
+    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.ts dist/findify-feedback.min.js",
+    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+    "prepublish": "npm run build",
+    "postpublish": "npm run clean",
+    "preversion": "npm run check && git checkout master && git merge develop",
+    "postversion": "git push && git push --tags && git checkout develop && git merge master && git push && npm publish"
+  },
   "author": "1ven",
-  "license": "MIT",
+  "license": "ISC",
+  "files": [
+    "dist",
+    "lib",
+    "index.d.ts"
+  ],
+  "repository": "https://github.com/findify/findify-feedback-js.git",
   "dependencies": {
     "@types/mocha": "^2.2.37",
     "cross-env": "^3.1.4",
