@@ -3,8 +3,6 @@ import * as rewire from 'rewire';
 
 const s = rewire('../../src/modules/storage');
 
-const read = s.__get__('read');
-const write = s.__get__('write');
 const readCookie = s.__get__('readCookie');
 const writeCookie = s.__get__('writeCookie');
 const readStorage = s.__get__('readStorage');
@@ -48,120 +46,6 @@ describe('storage', () => {
   afterEach(() => {
     global.window = undefined;
     global.document = undefined;
-  });
-
-  describe('read', () => {
-    it('should call "readCookie" and "readStorage" with proper "name"', () => {
-      const readCookieSpy = expect.createSpy();
-      const readStorageSpy = expect.createSpy();
-
-      const revertReadCookie = s.__set__('readCookie', readCookieSpy);
-      const revertReadStorage = s.__set__('readStorage', readStorageSpy);
-
-      read('key');
-
-      expect(readCookieSpy).toHaveBeenCalledWith('key');
-      expect(readStorageSpy).toHaveBeenCalledWith('key');
-
-      revertReadCookie();
-      revertReadStorage();
-    });
-
-    it('should return cookie value by default', () => {
-      const _readCookie = () => 'value1'
-      const _readStorage = () => 'value2';
-
-      const revertReadCookie = s.__set__('readCookie', _readCookie);
-      const revertReadStorage = s.__set__('readStorage', _readStorage);
-
-      expect(read('key')).toEqual('value1');
-
-      revertReadCookie();
-      revertReadStorage();
-    });
-
-    it('should return localStorage value if cookie does not exists', () => {
-      const _readCookie = () => undefined;
-      const _readStorage = () => 'value2';
-
-      const revertReadCookie = s.__set__('readCookie', _readCookie);
-      const revertReadStorage = s.__set__('readStorage', _readStorage);
-
-      expect(read('key')).toEqual('value2');
-
-      revertReadCookie();
-      revertReadStorage();
-    });
-  });
-
-  describe('write', () => {
-    it('should provide "increment" variable to "writeCookie" and "setCookie" equal to 30min if "permanent=false"', () => {
-      const writeCookieSpy = expect.createSpy();
-      const writeStorageSpy = expect.createSpy();
-
-      const revertWriteCookie = s.__set__('writeCookie', writeCookieSpy);
-      const revertWriteStorage = s.__set__('writeStorage', writeStorageSpy);
-
-      write('key', 'someValue');
-
-      const thirtyMins = 30 * 60 * 1000;
-
-      expect(writeCookieSpy.calls[0].arguments[0]).toEqual(thirtyMins);
-      expect(writeStorageSpy.calls[0].arguments[0]).toEqual(thirtyMins);
-
-      revertWriteCookie();
-      revertWriteStorage();
-    });
-
-    it('should provide "increment" variable to "writeCookie" and "setCookie" equal to 30years if "permanent=true"', () => {
-      const writeCookieSpy = expect.createSpy();
-      const writeStorageSpy = expect.createSpy();
-
-      const revertWriteCookie = s.__set__('writeCookie', writeCookieSpy);
-      const revertWriteStorage = s.__set__('writeStorage', writeStorageSpy);
-
-      write('key', 'someValue', true);
-
-      const thrtyYears = 30 * 365 * 24 * 60 * 60 * 1000;
-
-      expect(writeCookieSpy.calls[0].arguments[0]).toEqual(thrtyYears);
-      expect(writeStorageSpy.calls[0].arguments[0]).toEqual(thrtyYears);
-
-      revertWriteCookie();
-      revertWriteStorage();
-    });
-
-    it('should call "writeCookie" and "writeStorage" with with proper "name"', () => {
-      const writeCookieSpy = expect.createSpy();
-      const writeStorageSpy = expect.createSpy();
-
-      const revertWriteCookie = s.__set__('writeCookie', writeCookieSpy);
-      const revertWriteStorage = s.__set__('writeStorage', writeStorageSpy);
-
-      write('key');
-
-      expect(writeCookieSpy.calls[0].arguments[1]).toEqual('key');
-      expect(writeStorageSpy.calls[0].arguments[1]).toEqual('key');
-
-      revertWriteCookie();
-      revertWriteStorage();
-    });
-
-    it('should call "writeCookie" and "writeStorage" with with proper "value"', () => {
-      const writeCookieSpy = expect.createSpy();
-      const writeStorageSpy = expect.createSpy();
-
-      const revertWriteCookie = s.__set__('writeCookie', writeCookieSpy);
-      const revertWriteStorage = s.__set__('writeStorage', writeStorageSpy);
-
-      write('key', 'someValue');
-
-      expect(writeCookieSpy.calls[0].arguments[2]).toEqual('someValue');
-      expect(writeStorageSpy.calls[0].arguments[2]).toEqual('someValue');
-
-      revertWriteCookie();
-      revertWriteStorage();
-    });
   });
 
   describe('readCookie', () => {
