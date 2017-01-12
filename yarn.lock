@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@types/expect@^1.20.0":
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/@types/expect/-/expect-1.20.0.tgz#c475daba54c243a177b17540c959428f56b5ccf4"
+
 "@types/lodash@4.14.30":
   version "4.14.30"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.30.tgz#24b818a2a1a6c2d56678804f716e2b7eb791114b"
