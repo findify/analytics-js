@@ -1,8 +1,8 @@
 import * as has from 'lodash/has';
 import * as storage from './modules/storage';
+import * as uuid from 'uuid';
 
 import { requestApi } from './modules/requestApi';
-import { uuid } from './utils/uuid';
 import { validateSendEventParams, validateInitParams } from './validations';
 
 import {
@@ -129,8 +129,8 @@ const uidKey = storage.read(env.storage.uniqKey);
 
 const readUid = () => storage.read(uidKey);
 const readSid = () => storage.read(sidKey);
-const writeUid = () => storage.write(uidKey, uuid(16), true);
-const writeSid = () => storage.write(sidKey, uuid(16));
+const writeUid = () => storage.write(uidKey, uuid(), true);
+const writeSid = () => storage.write(sidKey, uuid());
 
 export {
   init,
