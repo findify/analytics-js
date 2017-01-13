@@ -33,7 +33,7 @@ function init(config: Config): Client {
         sid: readSid(),
       };
     },
-    sendEvent(name: EventName, request: PublicEventRequest) {
+    sendEvent(name: EventName, request) {
       validateSendEventParams(name, request);
 
       const user = this.getUser();
