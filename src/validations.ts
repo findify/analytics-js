@@ -19,7 +19,7 @@ function validateSendEventParams(name: EventName, request) {
     'purchase',
     'add-to-cart',
     'update-cart',
-    'view-page'
+    'view-page',
   ].indexOf(name) === -1) {
     throw new Error('Event not found');
   }
