@@ -28,15 +28,19 @@ function init(config: Config): Client {
 
   return {
     getUser(): User {
-      return {
-        uid: readUid(),
-        sid: readSid(),
-      };
+      const uid = readUid();
+      const sid = readSid();
+
+      return uid && sid ? { uid, sid } : undefined;
     },
     sendEvent(name: EventName, request) {
       validateSendEventParams(name, request);
 
       const user = this.getUser();
+
+      if (!user) {
+        return;
+      }
 
       if (name === 'click-suggestion') {
         requestApi({
@@ -100,7 +104,7 @@ function init(config: Config): Client {
       if (name === 'update-cart') {
         requestApi({
           user,
-          event: 'purchase',
+          event: 'update-cart',
           properties: {
             line_items: request.line_items,
           },
@@ -124,8 +128,8 @@ function init(config: Config): Client {
   };
 }
 
-const sidKey = storage.read(env.storage.visitKey);
-const uidKey = storage.read(env.storage.uniqKey);
+const uidKey = env.storage.uniqKey;
+const sidKey = env.storage.visitKey;
 
 const readUid = () => storage.read(uidKey);
 const readSid = () => storage.read(sidKey);
