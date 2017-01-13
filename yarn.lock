@@ -18,6 +18,10 @@
   version "2.2.37"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.37.tgz#8e0d5327ffa0734999c1010967853de917f3a38e"
 
+"@types/qs@^6.2.30":
+  version "6.2.30"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.2.30.tgz#139e247511ee3b9be539cdd553c8fdb33c1f624e"
+
 abbrev@1:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.0.9.tgz#91b4792588a7738c25f35dd6f63752a2f8776135"
@@ -1532,7 +1536,7 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-qs@~6.3.0:
+qs@^6.3.0, qs@~6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.3.0.tgz#f403b264f23bc01228c74131b407f18d5ea5d442"
 
