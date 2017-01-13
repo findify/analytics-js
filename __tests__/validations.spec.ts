@@ -114,7 +114,7 @@ describe('validations', () => {
           unit_price: 100,
           quantity: 2,
         }, {
-          item_id: 'testItemId',
+          item_id: 'testItemId2',
           quantity: 2,
         }],
       })).toThrow(/"line_items\[\]\.unit_price" param is required/);
@@ -130,7 +130,7 @@ describe('validations', () => {
           unit_price: 100,
           quantity: 2,
         }, {
-          item_id: 'testItemId',
+          item_id: 'testItemId2',
           unit_price: 100,
         }],
       })).toThrow(/"line_items\[\]\.quantity" param is required/);
@@ -164,7 +164,7 @@ describe('validations', () => {
           unit_price: 100,
           quantity: 2,
         }, {
-          item_id: 'testItemId',
+          item_id: 'testItemId2',
           quantity: 2,
         }],
       })).toThrow(/"line_items\[\]\.unit_price" param is required/);
@@ -177,7 +177,7 @@ describe('validations', () => {
           unit_price: 100,
           quantity: 2,
         }, {
-          item_id: 'testItemId',
+          item_id: 'testItemId2',
           unit_price: 100,
         }],
       })).toThrow(/"line_items\[\]\.quantity" param is required/);
