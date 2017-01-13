@@ -10,7 +10,7 @@ import {
   Client,
   User,
   EventName,
-  EventRequest,
+  PublicEventRequest,
 } from './types';
 
 const env = require('./env');
@@ -33,7 +33,7 @@ function init(config: Config): Client {
         sid: readSid(),
       };
     },
-    sendEvent(name: EventName, request: EventRequest) {
+    sendEvent(name: EventName, request: PublicEventRequest) {
       validateSendEventParams(name, request);
 
       const user = this.getUser();

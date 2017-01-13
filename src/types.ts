@@ -12,45 +12,68 @@ type LineItemData = {
   quantity: number,
 };
 
-type ClickSuggestionEventRequest = {
+type ClickSuggestionPublicEventRequest = {
   rid: string,
   suggestion: string,
 };
-type ClickItemEventRequest = {
+type ClickItemPublicEventRequest = {
   item_id: string,
   rid?: string,
 };
-type RedirectEventRequest = {
+type RedirectPublicEventRequest = {
   rid: string,
   suggestion: string,
 };
-type PurchaseEventRequest = {
+type PurchasePublicEventRequest = {
   order_id: string,
   currency: string,
   revenue: number,
   line_items: LineItemData[],
   affiliation?: string,
 };
-type UpdateCartEventRequest = {
+type UpdateCartPublicEventRequest = {
   line_items: LineItemData[],
 };
-type AddToCartEventRequest = {
+type AddToCartPublicEventRequest = {
   item_id: string,
   rid?: string,
   quantity?: number,
 };
-type ViewPageEventRequest = {
+type ViewPagePublicEventRequest = {
   item_id?: string,
 };
 
-type EventRequest = (
-  ClickSuggestionEventRequest |
-  ClickItemEventRequest |
-  RedirectEventRequest |
-  PurchaseEventRequest |
-  UpdateCartEventRequest |
-  AddToCartEventRequest |
-  ViewPageEventRequest
+type ClickSuggestionInternalEventRequest = ClickSuggestionPublicEventRequest;
+type ClickItemInternalEventRequest = ClickItemPublicEventRequest;
+type RedirectInternalEventRequest = RedirectPublicEventRequest;
+type PurchaseInternalEventRequest = PurchasePublicEventRequest;
+type UpdateCartInternalEventRequest = UpdateCartPublicEventRequest;
+type AddToCartInternalEventRequest = AddToCartPublicEventRequest;
+type ViewPageInternalEventRequest = ViewPagePublicEventRequest & {
+  url: string,
+  ref: string
+  width: number,
+  height: number,
+};
+
+type PublicEventRequest = (
+  ClickSuggestionPublicEventRequest |
+  ClickItemPublicEventRequest |
+  RedirectPublicEventRequest |
+  PurchasePublicEventRequest |
+  UpdateCartPublicEventRequest |
+  AddToCartPublicEventRequest |
+  ViewPagePublicEventRequest
+);
+
+type InternalEventRequest = (
+  ClickSuggestionInternalEventRequest |
+  ClickItemInternalEventRequest |
+  RedirectInternalEventRequest |
+  PurchaseInternalEventRequest |
+  UpdateCartInternalEventRequest |
+  AddToCartInternalEventRequest |
+  ViewPageInternalEventRequest
 );
 
 type EventName = (
@@ -65,27 +88,28 @@ type EventName = (
 
 type Client = {
   getUser(): User,
-  sendEvent(name: 'click-suggestion', request: ClickSuggestionEventRequest),
-  sendEvent(name: 'click-item', request: ClickItemEventRequest),
-  sendEvent(name: 'redirect', request: RedirectEventRequest),
-  sendEvent(name: 'purchase', request: PurchaseEventRequest),
-  sendEvent(name: 'add-to-cart', request: AddToCartEventRequest),
-  sendEvent(name: 'update-cart', request: UpdateCartEventRequest),
-  sendEvent(name: 'view-page', request: ViewPageEventRequest),
+  sendEvent(name: 'click-suggestion', request: ClickSuggestionPublicEventRequest),
+  sendEvent(name: 'click-item', request: ClickItemPublicEventRequest),
+  sendEvent(name: 'redirect', request: RedirectPublicEventRequest),
+  sendEvent(name: 'purchase', request: PurchasePublicEventRequest),
+  sendEvent(name: 'add-to-cart', request: AddToCartPublicEventRequest),
+  sendEvent(name: 'update-cart', request: UpdateCartPublicEventRequest),
+  sendEvent(name: 'view-page', request: ViewPagePublicEventRequest),
 };
 
 export {
   User,
   Config,
   Client,
-  EventRequest,
   EventName,
+  PublicEventRequest,
+  InternalEventRequest,
 
-  ClickSuggestionEventRequest,
-  ClickItemEventRequest,
-  RedirectEventRequest,
-  PurchaseEventRequest,
-  UpdateCartEventRequest,
-  AddToCartEventRequest,
-  ViewPageEventRequest
+  ClickSuggestionPublicEventRequest,
+  ClickItemPublicEventRequest,
+  RedirectPublicEventRequest,
+  PurchasePublicEventRequest,
+  UpdateCartPublicEventRequest,
+  AddToCartPublicEventRequest,
+  ViewPagePublicEventRequest
 }
