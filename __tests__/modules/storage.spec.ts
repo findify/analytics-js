@@ -131,7 +131,7 @@ describe('storage', () => {
 
     it('should write "name_" + _ttl entry to localStorage with lifetime timestamp', () => {
       writeStorage(1000, 'key', 'someValue');
-      expect(parseInt(window.localStorage.getItem('key_ttl'))).toBeA('number');
+      expect(parseInt(window.localStorage.getItem('key_ttl'), 10)).toBeA('number');
     });
 
     it('should remove existing entry if "value" is not provided', () => {
