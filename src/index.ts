@@ -13,7 +13,7 @@ import {
   PublicEventRequest,
 } from './types';
 
-const env = require('./env');
+import env = require('./env');
 
 function init(config: Config): Client {
   validateInitParams(config);

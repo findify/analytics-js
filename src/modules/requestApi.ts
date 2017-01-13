@@ -1,7 +1,7 @@
 import * as qs from 'qs';
 import { User, EventName, InternalEventRequest } from '../types';
 
-const env = require('../env');
+import env = require('../env');
 
 function requestApi(data: Data) {
   const queryString = qs.stringify(data);
