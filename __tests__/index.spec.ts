@@ -55,6 +55,7 @@ describe('init', () => {
 
   describe('sendEvent', () => {
     const getQueryParams = (link: string) => qs.parse(url.parse(link).query);
+    const key = 'testKey';
     const getUser = () => ({
       uid: window.localStorage.getItem('_findify_uniq'),
       sid: window.localStorage.getItem('_findify_visit'),
@@ -91,6 +92,7 @@ describe('init', () => {
           event: 'click-suggestion',
           user: getUser(),
           properties,
+          key,
         });
 
         done();
@@ -111,6 +113,7 @@ describe('init', () => {
           event: 'click-item',
           user: getUser(),
           properties,
+          key,
         });
 
         done();
@@ -131,6 +134,7 @@ describe('init', () => {
           event: 'redirect',
           user: getUser(),
           properties,
+          key,
         });
 
         done();
@@ -176,6 +180,7 @@ describe('init', () => {
               quantity: '1',
             }],
           },
+          key,
         });
 
         done();
@@ -201,6 +206,7 @@ describe('init', () => {
             rid: 'testRid',
             quantity: '1',
           },
+          key,
         });
 
         done();
@@ -238,6 +244,7 @@ describe('init', () => {
               quantity: '1',
             }],
           },
+          key,
         });
 
         done();
@@ -251,11 +258,12 @@ describe('init', () => {
       const itemId = 'testItemId';
 
       fauxJax.on('request', (req) => {
-        const { event, user, properties } = getQueryParams(req.requestURL);
+        const params = getQueryParams(req.requestURL);
 
-        expect(event).toBe('view-page');
-        expect(user).toEqual(getUser());
-        expect(properties).toEqual({
+        expect(params.key).toBe(key);
+        expect(params.event).toBe('view-page');
+        expect(params.user).toEqual(getUser());
+        expect(params.properties).toEqual({
           url: 'http://jsdom-url.com/',
           ref: 'http://jsdom-referrer-url.com',
           width: '0',

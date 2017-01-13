@@ -37,6 +37,7 @@ function init(config: Config): Client {
       validateSendEventParams(name, request);
 
       const user = this.getUser();
+      const { key } = config;
 
       if (!user) {
         return;
@@ -44,6 +45,7 @@ function init(config: Config): Client {
 
       if (name === 'click-suggestion') {
         requestApi({
+          key,
           user,
           event: 'click-suggestion',
           properties: {
@@ -55,6 +57,7 @@ function init(config: Config): Client {
 
       if (name === 'click-item') {
         requestApi({
+          key,
           user,
           event: 'click-item',
           properties: {
@@ -66,6 +69,7 @@ function init(config: Config): Client {
 
       if (name === 'redirect') {
         requestApi({
+          key,
           user,
           event: 'redirect',
           properties: {
@@ -77,6 +81,7 @@ function init(config: Config): Client {
 
       if (name === 'purchase') {
         requestApi({
+          key,
           user,
           event: 'purchase',
           properties: {
@@ -91,6 +96,7 @@ function init(config: Config): Client {
 
       if (name === 'add-to-cart') {
         requestApi({
+          key,
           user,
           event: 'add-to-cart',
           properties: {
@@ -103,6 +109,7 @@ function init(config: Config): Client {
 
       if (name === 'update-cart') {
         requestApi({
+          key,
           user,
           event: 'update-cart',
           properties: {
@@ -113,6 +120,7 @@ function init(config: Config): Client {
 
       if (name === 'view-page') {
         requestApi({
+          key,
           user,
           event: 'view-page',
           properties: {

@@ -10,17 +10,16 @@ const r = rewire('../../src/modules/requestApi');
 const requestApi = r.__get__('requestApi');
 
 describe('requestApi', () => {
-  const user = {
-    uid: 'testUserId',
-    sid: 'testSessionId',
-  };
-
   const getQueryParams = (link: string) => qs.parse(url.parse(link).query);
   const makeGenericRequest = () => requestApi({
-    user,
     event: 'click-item',
     properties: {
       item_id: 'itemId',
+    },
+    key: 'testKey',
+    user: {
+      uid: 'testUserId',
+      sid: 'testSessionId',
     },
   });
 
@@ -41,7 +40,8 @@ describe('requestApi', () => {
       expect(req.requestURL).toEqual(
         'https://search-staging.findify.io' +
         '/feedback?' +
-        'user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId&event=click-item&properties%5Bitem_id%5D=itemId');
+        'event=click-item&properties' +
+        '%5Bitem_id%5D=itemId&key=testKey&user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId');
       done();
     });
 
@@ -92,7 +92,9 @@ describe('requestApi', () => {
   });
 
   it('should convert data to query string', (done) => {
-    const s = 'user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId&event=click-item&properties%5Bitem_id%5D=itemId';
+    const s = 'event=click-item&'
+    + 'properties%5Bitem_id%5D=itemId&key=testKey&user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId';
+
     fauxJax.on('request', (req) => {
       expect(url.parse(req.requestURL).query).toEqual(s);
       done();

@@ -15,6 +15,7 @@ function makeSrc(queryString: string) {
 }
 
 type Data = {
+  key: string,
   user: User,
   event: EventName,
   properties: InternalEventRequest,
