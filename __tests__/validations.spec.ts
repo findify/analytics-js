@@ -12,6 +12,12 @@ describe('validations', () => {
   });
 
   describe('validateSendEventParams', () => {
+    it('should throw an Error if provided urecognized event', () => {
+      expect(() => validateSendEventParams('unrecognized', {
+        suggestion: 'testSuggestion',
+      })).toThrow(/Event not found/);
+    });
+
     it('should throw an Error if "rid" is not provided at "click-suggestion" event', () => {
       expect(() => validateSendEventParams('click-suggestion', {
         suggestion: 'testSuggestion',

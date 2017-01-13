@@ -12,6 +12,18 @@ function validateInitParams(config: Config) {
 }
 
 function validateSendEventParams(name: EventName, request) {
+  if ([
+    'click-suggestion',
+    'click-item',
+    'redirect',
+    'purchase',
+    'add-to-cart',
+    'update-cart',
+    'view-page'
+  ].indexOf(name) === -1) {
+    throw new Error('Event not found');
+  }
+
   if (name === 'click-suggestion') {
     if (!has(request, 'rid')) {
       throw new Error('"rid" param is required');
