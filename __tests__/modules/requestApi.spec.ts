@@ -38,13 +38,10 @@ describe('requestApi', () => {
     const restoreEnv = r.__set__('env', require('../../src/env/staging'));
 
     fauxJax.on('request', (req) => {
-      expect(
-        req.requestURL
-      ).toEqual(
+      expect(req.requestURL).toEqual(
         'https://search-staging.findify.io' +
         '/feedback?' +
-        'user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId&event=click-item&properties%5Bitem_id%5D=itemId'
-      );
+        'user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId&event=click-item&properties%5Bitem_id%5D=itemId');
       done();
     });
 
@@ -95,10 +92,9 @@ describe('requestApi', () => {
   });
 
   it('should convert data to query string', (done) => {
+    const s = 'user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId&event=click-item&properties%5Bitem_id%5D=itemId';
     fauxJax.on('request', (req) => {
-      expect(
-        url.parse(req.requestURL).query
-      ).toEqual('user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId&event=click-item&properties%5Bitem_id%5D=itemId');
+      expect(url.parse(req.requestURL).query).toEqual(s);
       done();
     });
 
