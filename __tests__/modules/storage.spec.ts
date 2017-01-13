@@ -13,6 +13,8 @@ declare const global: {
   window: any,
 };
 
+// test through public interface
+
 describe('storage', () => {
 
   beforeEach(() => {
