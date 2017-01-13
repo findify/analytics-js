@@ -1,5 +1,6 @@
 import * as expect from 'expect';
 import * as rewire from 'rewire';
+import { setupJsDom, teardownJsDom } from '../jsdom-helper';
 
 const s = rewire('../../src/modules/storage');
 
@@ -8,47 +9,12 @@ const writeCookie = s.__get__('writeCookie');
 const readStorage = s.__get__('readStorage');
 const writeStorage = s.__get__('writeStorage');
 
-declare const global: {
-  document: any,
-  window: any,
-};
-
 // test through public interface
 
 describe('storage', () => {
 
-  beforeEach(() => {
-    let storage = {};
-
-    global.window = {
-      localStorage: {
-        setItem(key, value) {
-          storage[key] = value;
-        },
-        getItem(key) {
-          return storage[key] || null;
-        },
-        removeItem(key) {
-          delete storage[key];
-        },
-      },
-    };
-
-    global.document = {
-      __cookie: '',
-      get cookie() {
-        return this.__cookie;
-      },
-      set cookie(value) {
-        this.__cookie += !this.__cookie ? value : '; ' + value;
-      },
-    };
-  });
-
-  afterEach(() => {
-    global.window = undefined;
-    global.document = undefined;
-  });
+  beforeEach(setupJsDom);
+  afterEach(teardownJsDom);
 
   describe('readCookie', () => {
     const assertionsData = [{
@@ -61,20 +27,20 @@ describe('storage', () => {
 
     assertionsData.forEach((item) => {
       it(`should return "${item.value}" if "${item.key}" was provided`, () => {
-        document.cookie = `${item.key}=${item.value}`;
+        window.document.cookie = `${item.key}=${item.value}`;
 
         expect(readCookie(item.key)).toEqual(item.value);
       });
     });
 
     it('should return "undefined" if entry doesn`t exists in cookies', () => {
-      document.cookie = 'key=value';
+      window.document.cookie = 'key=value';
 
       expect(readCookie('test')).toEqual(undefined);
     });
 
     it('should return "undefined" if cookies are empty', () => {
-      document.cookie = '';
+      window.document.cookie = '';
 
       expect(readCookie('test')).toEqual(undefined);
     });
@@ -84,7 +50,7 @@ describe('storage', () => {
     it('should write entry to cookies', () => {
       writeCookie(1000, 'test', 'someValue');
 
-      const data = document.cookie.split('; ');
+      const data = window.document.cookie.split('; ');
 
       expect(data[0]).toEqual('test=someValue');
       expect(data[1]).toMatch(/expires=.*/);
@@ -92,11 +58,11 @@ describe('storage', () => {
     });
 
     it('should remove existing entry if "value" is not provided', () => {
-      document.cookie = 'key=value';
+      window.document.cookie = 'key=value';
 
       writeCookie(1000, 'key');
 
-      expect(document.cookie).toMatch(/key=; expires=.*; path=\//);
+      expect(window.document.cookie).toMatch(/key=; expires=.*; path=\//);
     });
   });
 
