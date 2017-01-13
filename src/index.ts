@@ -1,8 +1,8 @@
 import * as has from 'lodash/has';
-
 import * as storage from './modules/storage';
+
 import { uuid } from './utils/uuid';
-import { validateSendEventParams } from './validations';
+import { validateSendEventParams, validateInitParams } from './validations';
 
 import {
   Config,
@@ -15,9 +15,7 @@ import {
 const env = require('./env');
 
 function init(config: Config): Client {
-  if (!has(config, 'key')) {
-    throw new Error('"key" param is required');
-  }
+  validateInitParams(config);
 
   if (!readSid()) {
     writeSid();

@@ -1,11 +1,18 @@
 import * as has from 'lodash/has';
 
 import {
+  Config,
   EventName,
   EventRequest,
   PurchaseEventRequest,
   UpdateCartEventRequest,
 } from './types';
+
+function validateInitParams(config: Config) {
+  if (!has(config, 'key')) {
+    throw new Error('"key" param is required');
+  }
+}
 
 function validateSendEventParams(name: EventName, request: EventRequest) {
   if (name === 'click-suggestion') {
@@ -87,4 +94,5 @@ function validateSendEventParams(name: EventName, request: EventRequest) {
 
 export {
   validateSendEventParams,
+  validateInitParams,
 }
