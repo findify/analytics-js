@@ -3,9 +3,6 @@ import * as has from 'lodash/has';
 import {
   Config,
   EventName,
-  EventRequest,
-  PurchaseEventRequest,
-  UpdateCartEventRequest,
 } from './types';
 
 function validateInitParams(config: Config) {
@@ -14,7 +11,7 @@ function validateInitParams(config: Config) {
   }
 }
 
-function validateSendEventParams(name: EventName, request: EventRequest) {
+function validateSendEventParams(name: EventName, request) {
   if (name === 'click-suggestion') {
     if (!has(request, 'rid')) {
       throw new Error('"rid" param is required');
@@ -56,15 +53,15 @@ function validateSendEventParams(name: EventName, request: EventRequest) {
       throw new Error('"line_items" param is required');
     }
 
-    if (!(request as PurchaseEventRequest).line_items.every((item) => !! item.item_id)) {
+    if (!(request).line_items.every((item) => !! item.item_id)) {
       throw new Error('"line_items[].item_id" param is required');
     }
 
-    if (!(request as PurchaseEventRequest).line_items.every((item) => !! item.unit_price)) {
+    if (!(request).line_items.every((item) => !! item.unit_price)) {
       throw new Error('"line_items[].unit_price" param is required');
     }
 
-    if (!(request as PurchaseEventRequest).line_items.every((item) => !! item.quantity)) {
+    if (!(request).line_items.every((item) => !! item.quantity)) {
       throw new Error('"line_items[].quantity" param is required');
     }
   }
@@ -78,15 +75,15 @@ function validateSendEventParams(name: EventName, request: EventRequest) {
       throw new Error('"line_items" param is required');
     }
 
-    if (!(request as UpdateCartEventRequest).line_items.every((item) => !! item.item_id)) {
+    if (!(request).line_items.every((item) => !! item.item_id)) {
       throw new Error('"line_items[].item_id" param is required');
     }
 
-    if (!(request as UpdateCartEventRequest).line_items.every((item) => !! item.unit_price)) {
+    if (!(request).line_items.every((item) => !! item.unit_price)) {
       throw new Error('"line_items[].unit_price" param is required');
     }
 
-    if (!(request as UpdateCartEventRequest).line_items.every((item) => !! item.quantity)) {
+    if (!(request).line_items.every((item) => !! item.quantity)) {
       throw new Error('"line_items[].quantity" param is required');
     }
   }
