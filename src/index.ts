@@ -1,8 +1,8 @@
 import * as has from 'lodash/has';
 import * as storage from './modules/storage';
-import * as shoritd from 'shortid';
 
 import { requestApi } from './modules/requestApi';
+import { generateId } from './utils/generateId';
 import { validateSendEventParams, validateInitParams } from './validations';
 
 import {
@@ -133,8 +133,8 @@ const sidKey = env.storage.visitKey;
 
 const readUid = () => storage.read(uidKey);
 const readSid = () => storage.read(sidKey);
-const writeUid = () => storage.write(uidKey, shoritd.generate(), true);
-const writeSid = () => storage.write(sidKey, shoritd.generate());
+const writeUid = () => storage.write(uidKey, generateId(), true);
+const writeSid = () => storage.write(sidKey, generateId());
 
 export {
   init,
