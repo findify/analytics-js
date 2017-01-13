@@ -5,13 +5,13 @@ import env = require('../env');
 
 function requestApi(data: Data) {
   const queryString = qs.stringify(data);
-  const image = new Image();
+  const image = window.document.createElement('img');
 
   image.src = makeSrc(queryString);
 }
 
 function makeSrc(queryString: string) {
-  return env.searchApi.url + '/feedback' + queryString;
+  return env.searchApi.url + '/feedback?' + queryString;
 }
 
 type Data = {
