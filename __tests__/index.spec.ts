@@ -297,5 +297,12 @@ describe('init', () => {
         item_id: itemId,
       });
     });
+
+    it('should not throw an Error if "item_id" is not provided', () => {
+      const feedback = runInit();
+
+      expect(() => feedback.sendEvent('view-page')).toNotThrow();
+      expect(() => feedback.sendEvent('view-page', {})).toNotThrow();
+    });
   });
 });

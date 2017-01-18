@@ -33,7 +33,7 @@ function init(config: Config): Client {
 
       return uid && sid ? { uid, sid } : undefined;
     },
-    sendEvent(name: EventName, request) {
+    sendEvent(name: EventName, request?) {
       validateSendEventParams(name, request);
 
       const user = this.getUser();
@@ -124,11 +124,11 @@ function init(config: Config): Client {
           user,
           event: 'view-page',
           properties: {
+            ...request,
             url: window.location.href,
             ref: window.document.referrer,
             width: window.screen.width,
             height: window.screen.height,
-            item_id: request.item_id,
           },
         });
       }

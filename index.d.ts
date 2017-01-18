@@ -56,7 +56,7 @@ declare module "@findify/findify-feedback" {
     sendEvent(type: 'purchase', request: PurchaseEventRequest),
     sendEvent(type: 'add-to-cart', request: AddToCartEventRequest),
     sendEevnt(type: 'update-cart', request: UpdateCartEventRequest),
-    sendEvent(type: 'view-page', request: ViewPageEventRequest),
+    sendEvent(type: 'view-page', request?: ViewPageEventRequest),
   };
 
   function init(config: Config): Client;

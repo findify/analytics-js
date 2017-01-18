@@ -94,7 +94,7 @@ type Client = {
   sendEvent(name: 'purchase', request: PurchasePublicEventRequest),
   sendEvent(name: 'add-to-cart', request: AddToCartPublicEventRequest),
   sendEvent(name: 'update-cart', request: UpdateCartPublicEventRequest),
-  sendEvent(name: 'view-page', request: ViewPagePublicEventRequest),
+  sendEvent(name: 'view-page', request?: ViewPagePublicEventRequest),
 };
 
 export {
