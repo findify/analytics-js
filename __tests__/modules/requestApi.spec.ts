@@ -39,7 +39,7 @@ describe('requestApi', () => {
     fauxJax.on('request', (req) => {
       expect(req.requestURL).toEqual(
         'https://search-staging.findify.io' +
-        '/feedback?' +
+        '/v3/feedback?' +
         'event=click-item&properties' +
         '%5Bitem_id%5D=itemId&key=testKey&user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId');
       done();
@@ -58,11 +58,12 @@ describe('requestApi', () => {
     makeGenericRequest();
   });
 
-  it('should send request to "https://search-staging.findify.io" in staging mode', (done) => {
+  it('should send request to "https://search-staging.findify.io/v3" in staging mode', (done) => {
     const restoreEnv = r.__set__('env', require('../../src/env/staging'));
 
     fauxJax.on('request', (req) => {
       expect(req.requestURL).toMatch(/https:\/\/search-staging.findify.io/);
+      expect(url.parse(req.requestURL).pathname).toBe('/v3/feedback');
       done();
     });
 
@@ -70,11 +71,12 @@ describe('requestApi', () => {
     restoreEnv();
   });
 
-  it('should send request to "https://api-v3.findify.io" in production mode', (done) => {
+  it('should send request to "https://api-v3.findify.io/v3" in production mode', (done) => {
     const restoreEnv = r.__set__('env', require('../../src/env/production'));
 
     fauxJax.on('request', (req) => {
       expect(req.requestURL).toMatch(/https:\/\/api-v3.findify.io/);
+      expect(url.parse(req.requestURL).pathname).toBe('/v3/feedback');
       done();
     });
 
@@ -84,7 +86,7 @@ describe('requestApi', () => {
 
   it('should send request to "/feedback" endpoint', (done) => {
     fauxJax.on('request', (req) => {
-      expect(url.parse(req.requestURL).pathname).toEqual('/feedback');
+      expect(url.parse(req.requestURL).pathname.replace(/\/v3/, '')).toEqual('/feedback');
       done();
     });
 

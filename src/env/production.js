@@ -1,6 +1,6 @@
 module.exports = {
   searchApi: {
-    url: 'https://api-v3.findify.io',
+    url: 'https://api-v3.findify.io/v3',
   },
   storage: {
     visitKey: '_findify_visit',
