@@ -48,10 +48,7 @@ function init(config: Config): Client {
           key,
           user,
           event: 'click-suggestion',
-          properties: {
-            rid: request.rid,
-            suggestion: request.suggestion,
-          },
+          properties: request,
         });
       }
 
@@ -60,10 +57,7 @@ function init(config: Config): Client {
           key,
           user,
           event: 'click-item',
-          properties: {
-            rid: request.rid,
-            item_id: request.item_id,
-          },
+          properties: request,
         });
       }
 
@@ -72,10 +66,7 @@ function init(config: Config): Client {
           key,
           user,
           event: 'redirect',
-          properties: {
-            rid: request.rid,
-            suggestion: request.suggestion,
-          },
+          properties: request,
         });
       }
 
@@ -84,13 +75,7 @@ function init(config: Config): Client {
           key,
           user,
           event: 'purchase',
-          properties: {
-            order_id: request.order_id,
-            currency: request.currency,
-            revenue: request.revenue,
-            line_items: request.line_items,
-            affiliation: request.affiliation,
-          },
+          properties: request,
         });
       }
 
@@ -99,11 +84,7 @@ function init(config: Config): Client {
           key,
           user,
           event: 'add-to-cart',
-          properties: {
-            rid: request.rid,
-            item_id: request.item_id,
-            quantity: request.quantity,
-          },
+          properties: request,
         });
       }
 
@@ -112,9 +93,7 @@ function init(config: Config): Client {
           key,
           user,
           event: 'update-cart',
-          properties: {
-            line_items: request.line_items,
-          },
+          properties: request,
         });
       }
 
