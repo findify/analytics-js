@@ -37,7 +37,8 @@ describe('requestApi', () => {
     const restoreEnv = r.__set__('env', require('../../src/env/staging'));
 
     fauxJax.on('request', (req) => {
-      expect(req.requestURL).toEqual(
+      expect(req.requestURL).toMatch(/t_client=[0-9]*/);
+      expect(req.requestURL.replace(/&t_client=[0-9]*/, '')).toEqual(
         'https://search-staging.findify.io' +
         '/v3/feedback?' +
         'event=click-item&properties' +
@@ -93,12 +94,22 @@ describe('requestApi', () => {
     makeGenericRequest();
   });
 
+  it('should add "t_client" param with timestamp', (done) => {
+    fauxJax.on('request', (req) => {
+      expect(url.parse(req.requestURL).query).toMatch(/t_client=[0-9]*/);
+      done();
+    });
+
+    makeGenericRequest();
+  });
+
   it('should convert data to query string', (done) => {
     const s = 'event=click-item&'
     + 'properties%5Bitem_id%5D=itemId&key=testKey&user%5Buid%5D=testUserId&user%5Bsid%5D=testSessionId';
 
     fauxJax.on('request', (req) => {
-      expect(url.parse(req.requestURL).query).toEqual(s);
+      const { query } = url.parse(req.requestURL);
+      expect(query.replace(/&t_client=[0-9]*/, '')).toEqual(s);
       done();
     });
 

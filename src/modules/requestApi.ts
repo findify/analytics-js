@@ -4,7 +4,10 @@ import { User, EventName, InternalEventRequest } from '../types';
 import env = require('../env');
 
 function requestApi(data: Data) {
-  const queryString = qs.stringify(data);
+  const queryString = qs.stringify({
+    ...data,
+    t_client: Date.now(),
+  });
   const image = window.document.createElement('img');
 
   image.src = makeSrc(queryString);

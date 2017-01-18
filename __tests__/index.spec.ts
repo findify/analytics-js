@@ -88,7 +88,10 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        expect(getQueryParams(req.requestURL)).toEqual({
+        const params = getQueryParams(req.requestURL)
+
+        expect(params.t_client).toExist();
+        expect(params).toContain({
           event: 'click-suggestion',
           user: getUser(),
           properties,
@@ -109,7 +112,10 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        expect(getQueryParams(req.requestURL)).toEqual({
+        const params = getQueryParams(req.requestURL)
+
+        expect(params.t_client).toExist();
+        expect(params).toContain({
           event: 'click-item',
           user: getUser(),
           properties,
@@ -130,7 +136,10 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        expect(getQueryParams(req.requestURL)).toEqual({
+        const params = getQueryParams(req.requestURL)
+
+        expect(params.t_client).toExist();
+        expect(params).toContain({
           event: 'redirect',
           user: getUser(),
           properties,
@@ -162,7 +171,10 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        expect(getQueryParams(req.requestURL)).toEqual({
+        const params = getQueryParams(req.requestURL)
+
+        expect(params.t_client).toExist();
+        expect(params).toContain({
           event: 'purchase',
           user: getUser(),
           properties: {
@@ -198,7 +210,10 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        expect(getQueryParams(req.requestURL)).toEqual({
+        const params = getQueryParams(req.requestURL)
+
+        expect(params.t_client).toExist();
+        expect(params).toContain({
           event: 'add-to-cart',
           user: getUser(),
           properties: {
@@ -230,7 +245,10 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        expect(getQueryParams(req.requestURL)).toEqual({
+        const params = getQueryParams(req.requestURL)
+
+        expect(params.t_client).toExist();
+        expect(params).toContain({
           event: 'update-cart',
           user: getUser(),
           properties: {
@@ -263,7 +281,8 @@ describe('init', () => {
         expect(params.key).toBe(key);
         expect(params.event).toBe('view-page');
         expect(params.user).toEqual(getUser());
-        expect(params.properties).toEqual({
+        expect(params.t_client).toExist();
+        expect(params.properties).toContain({
           url: 'http://jsdom-url.com/',
           ref: 'http://jsdom-referrer-url.com',
           width: '0',
