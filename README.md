@@ -1,11 +1,11 @@
 # Getting started
 ## Installation
 ```
-npm install findify-feedback --save
+npm install findify-analytics --save
 ```
 or
 ```
-yarn add findify-feedback
+yarn add findify-analytics
 ```
 Alternatively, you can use UMD builds, by requiring them to the page using `<script>` tag:
 ```
@@ -18,10 +18,10 @@ link to unminified UMD build
 
 ## Usage example
 ```javascript
-var FindifyFeedback = require('findify-feedback');
+var FindifyAnalytics = require('findify-analytics');
 
 // First, you need to initialize library:
-var client = FindifyFeedback.init({
+var client = FindifyAnalytics.init({
   key: 'your_api_key',
 });
 
@@ -36,4 +36,4 @@ var user = client.getUser();
 ```
 
 # Documentation
-- [API Reference](https://findify.readme.io/reference#findifyfeedbackinitconfig)
+- [API Reference](https://findify.readme.io/reference#analytics-js-introduction)

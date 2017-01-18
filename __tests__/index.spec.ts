@@ -35,18 +35,18 @@ describe('init', () => {
 
   describe('getUser', () => {
     it('should return "undefined" ether user id or session id is "undefined"', () => {
-      const feedback = runInit();
+      const analytics = runInit();
 
       delete window.document.cookie;
       (window as any).localStorage = undefined;
 
-      expect(feedback.getUser()).toBe(undefined);
+      expect(analytics.getUser()).toBe(undefined);
     });
 
     it('should return user object from storage', () => {
-      const feedback = runInit();
+      const analytics = runInit();
 
-      const user = feedback.getUser();
+      const user = analytics.getUser();
 
       expect(user.uid).toExist();
       expect(user.sid).toExist();
@@ -62,7 +62,7 @@ describe('init', () => {
     });
 
     it('should not send event if user was disabled cookies and localStorage', (done) => {
-      const feedback = runInit();
+      const analytics = runInit();
 
       delete window.document.cookie;
       (window as any).localStorage = undefined;
@@ -74,14 +74,14 @@ describe('init', () => {
 
       const timeout = setTimeout(done, 500);
 
-      feedback.sendEvent('click-item', {
+      analytics.sendEvent('click-item', {
         rid: 'testRid',
         item_id: 'testItemId',
       });
     });
 
     it('should send "click-suggestion" event', (done) => {
-      const feedback = runInit();
+      const analytics = runInit();
       const properties = {
         rid: 'testRid',
         suggestion: 'testSuggestion',
@@ -101,11 +101,11 @@ describe('init', () => {
         done();
       });
 
-      feedback.sendEvent('click-suggestion', properties);
+      analytics.sendEvent('click-suggestion', properties);
     });
 
     it('should send "click-item" event', (done) => {
-      const feedback = runInit();
+      const analytics = runInit();
       const properties = {
         rid: 'testRid',
         item_id: 'testItemId',
@@ -125,11 +125,11 @@ describe('init', () => {
         done();
       });
 
-      feedback.sendEvent('click-item', properties);
+      analytics.sendEvent('click-item', properties);
     });
 
     it('should send "redirect" event', (done) => {
-      const feedback = runInit();
+      const analytics = runInit();
       const properties = {
         rid: 'testRid',
         suggestion: 'testSuggestion',
@@ -149,11 +149,11 @@ describe('init', () => {
         done();
       });
 
-      feedback.sendEvent('redirect', properties);
+      analytics.sendEvent('redirect', properties);
     });
 
     it('should send "purchase" event', (done) => {
-      const feedback = runInit();
+      const analytics = runInit();
       const properties = {
         order_id: 'testOrderId',
         currency: 'testCurrency',
@@ -198,11 +198,11 @@ describe('init', () => {
         done();
       });
 
-      feedback.sendEvent('purchase', properties);
+      analytics.sendEvent('purchase', properties);
     });
 
     it('should send "add-to-cart" event', (done) => {
-      const feedback = runInit();
+      const analytics = runInit();
       const properties = {
         item_id: 'testItemId',
         rid: 'testRid',
@@ -227,11 +227,11 @@ describe('init', () => {
         done();
       });
 
-      feedback.sendEvent('add-to-cart', properties);
+      analytics.sendEvent('add-to-cart', properties);
     });
 
     it('should send "update-cart" event', (done) => {
-      const feedback = runInit();
+      const analytics = runInit();
       const properties = {
         line_items: [{
           item_id: 'testItemId',
@@ -268,11 +268,11 @@ describe('init', () => {
         done();
       });
 
-      feedback.sendEvent('update-cart', properties);
+      analytics.sendEvent('update-cart', properties);
     });
 
     it('should send "view-page" event', (done) => {
-      const feedback = runInit();
+      const analytics = runInit();
       const itemId = 'testItemId';
 
       fauxJax.on('request', (req) => {
@@ -293,16 +293,16 @@ describe('init', () => {
         done();
       });
 
-      feedback.sendEvent('view-page', {
+      analytics.sendEvent('view-page', {
         item_id: itemId,
       });
     });
 
     it('should not throw an Error if "item_id" is not provided', () => {
-      const feedback = runInit();
+      const analytics = runInit();
 
-      expect(() => feedback.sendEvent('view-page')).toNotThrow();
-      expect(() => feedback.sendEvent('view-page', {})).toNotThrow();
+      expect(() => analytics.sendEvent('view-page')).toNotThrow();
+      expect(() => analytics.sendEvent('view-page', {})).toNotThrow();
     });
   });
 });

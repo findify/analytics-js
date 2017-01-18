@@ -1,5 +1,5 @@
 {
-  "name": "@findify/findify-feedback",
+  "name": "findify-analytics",
   "version": "1.0.4",
   "main": "lib/index.js",
   "scripts": {
@@ -8,8 +8,8 @@
     "check": "npm run test && npm run build && npm run lint && npm run clean",
     "test": "mocha --compilers ts:ts-node/register --recursive -R min  ./__tests__",
     "build:commonjs": "tsc --project . && cpx './src/env/*.js' ./lib/env",
-    "build:umd": "cross-env NODE_ENV=development webpack src/index.ts dist/findify-feedback.js",
-    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.ts dist/findify-feedback.min.js",
+    "build:umd": "cross-env NODE_ENV=development webpack src/index.ts dist/findify-analytics.js",
+    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.ts dist/findify-analytics.min.js",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "prepublish": "npm run build",
     "postpublish": "npm run clean",
@@ -23,7 +23,7 @@
     "lib",
     "index.d.ts"
   ],
-  "repository": "https://github.com/findify/findify-feedback.git",
+  "repository": "https://github.com/findify/findify-analytics.git",
   "dependencies": {
     "@types/expect": "^1.20.0",
     "@types/js-cookie": "^2.0.28",

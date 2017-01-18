@@ -11,7 +11,7 @@ var config = {
     }],
   },
   output: {
-    library: 'FindifyFeedback',
+    library: 'FindifyAnalytics',
     libraryTarget: 'umd',
   },
   plugins: [
