@@ -43,74 +43,20 @@ function init(config: Config): Client {
         return;
       }
 
-      if (name === 'click-suggestion') {
-        requestApi({
-          key,
-          user,
-          event: 'click-suggestion',
-          properties: request,
-        });
-      }
+      const properties = name === 'view-page' ? {
+        ...request,
+        url: window.location.href,
+        ref: window.document.referrer,
+        width: window.screen.width,
+        height: window.screen.height,
+      } : request;
 
-      if (name === 'click-item') {
-        requestApi({
-          key,
-          user,
-          event: 'click-item',
-          properties: request,
-        });
-      }
-
-      if (name === 'redirect') {
-        requestApi({
-          key,
-          user,
-          event: 'redirect',
-          properties: request,
-        });
-      }
-
-      if (name === 'purchase') {
-        requestApi({
-          key,
-          user,
-          event: 'purchase',
-          properties: request,
-        });
-      }
-
-      if (name === 'add-to-cart') {
-        requestApi({
-          key,
-          user,
-          event: 'add-to-cart',
-          properties: request,
-        });
-      }
-
-      if (name === 'update-cart') {
-        requestApi({
-          key,
-          user,
-          event: 'update-cart',
-          properties: request,
-        });
-      }
-
-      if (name === 'view-page') {
-        requestApi({
-          key,
-          user,
-          event: 'view-page',
-          properties: {
-            ...request,
-            url: window.location.href,
-            ref: window.document.referrer,
-            width: window.screen.width,
-            height: window.screen.height,
-          },
-        });
-      }
+      requestApi({
+        key,
+        user,
+        properties,
+        event: name,
+      });
     },
   };
 }
