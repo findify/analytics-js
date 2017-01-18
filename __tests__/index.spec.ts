@@ -88,7 +88,7 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        const params = getQueryParams(req.requestURL)
+        const params = getQueryParams(req.requestURL);
 
         expect(params.t_client).toExist();
         expect(params).toContain({
@@ -112,7 +112,7 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        const params = getQueryParams(req.requestURL)
+        const params = getQueryParams(req.requestURL);
 
         expect(params.t_client).toExist();
         expect(params).toContain({
@@ -136,7 +136,7 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        const params = getQueryParams(req.requestURL)
+        const params = getQueryParams(req.requestURL);
 
         expect(params.t_client).toExist();
         expect(params).toContain({
@@ -171,7 +171,7 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        const params = getQueryParams(req.requestURL)
+        const params = getQueryParams(req.requestURL);
 
         expect(params.t_client).toExist();
         expect(params).toContain({
@@ -210,7 +210,7 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        const params = getQueryParams(req.requestURL)
+        const params = getQueryParams(req.requestURL);
 
         expect(params.t_client).toExist();
         expect(params).toContain({
@@ -245,7 +245,7 @@ describe('init', () => {
       };
 
       fauxJax.on('request', (req) => {
-        const params = getQueryParams(req.requestURL)
+        const params = getQueryParams(req.requestURL);
 
         expect(params.t_client).toExist();
         expect(params).toContain({
