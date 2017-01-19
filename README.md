@@ -37,3 +37,6 @@ var user = client.getUser();
 
 # Documentation
 - [API Reference](https://findify.readme.io/reference#analytics-js-introduction)
+
+# License
+MIT
