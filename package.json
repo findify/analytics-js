@@ -17,7 +17,7 @@
     "postversion": "git push && git push --tags && git checkout develop && git merge master && git push && npm publish"
   },
   "author": "1ven",
-  "license": "ISC",
+  "license": "MIT",
   "files": [
     "dist",
     "lib",
