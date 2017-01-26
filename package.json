@@ -2,6 +2,11 @@
   "name": "findify-analytics",
   "version": "1.1.0",
   "main": "lib/index.js",
+  "tags": [
+    "findify",
+    "analytics",
+    "search"
+  ],
   "scripts": {
     "clean": "rimraf ./lib ./dist",
     "lint": "tslint --project .",
@@ -16,8 +21,8 @@
     "preversion": "npm run check && git checkout master && git merge develop",
     "postversion": "git push && git push --tags && git checkout develop && git merge master && git push"
   },
-  "author": "1ven",
-  "license": "ISC",
+  "author": "Findify <yourfriends@findify.io>",
+  "license": "MIT",
   "files": [
     "dist",
     "lib",
