@@ -9,11 +9,11 @@ yarn add findify-analytics
 ```
 Alternatively, you can use UMD builds, by requiring them to the page using `<script>` tag:
 ```
-https://s3.amazonaws.com/findify-assets/analytics-js/findify-analytics.1.1.2.min.js
+https://findify-assets-2bveeb6u8ag.netdna-ssl.com/analytics-js/findify-analytics.1.1.2.min.js
 ```
 or using unminified version:
 ```
-https://s3.amazonaws.com/findify-assets/analytics-js/findify-analytics.1.1.2.js
+https://findify-assets-2bveeb6u8ag.netdna-ssl.com/analytics-js/findify-analytics.1.1.2.js
 ```
 
 ## Usage example
