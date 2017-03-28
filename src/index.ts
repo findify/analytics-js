@@ -18,21 +18,27 @@ import env = require('./env');
 function init(config: Config): Client {
   validateInitParams(config);
 
-  if (!readSid()) {
+  const initialSid = readSid();
+  const initialUid = readUid();
+
+  if (!initialSid) {
     writeSid();
   }
 
-  if (!readUid()) {
+  if (!initialUid) {
     writeUid();
   }
 
   return {
+    isUserPersist: initialSid && initialUid,
+
     getUser(): User {
       const uid = readUid();
       const sid = readSid();
 
       return uid && sid ? { uid, sid } : undefined;
     },
+
     sendEvent(name: EventName, request?) {
       validateSendEventParams(name, request);
 
