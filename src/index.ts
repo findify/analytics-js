@@ -30,7 +30,7 @@ function init(config: Config): Client {
   }
 
   return {
-    isUserPersist: initialSid && initialUid,
+    isUserPersist: !!(initialSid && initialUid),
 
     getUser(): User {
       const uid = readUid();
