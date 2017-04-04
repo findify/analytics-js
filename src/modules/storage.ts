@@ -59,4 +59,8 @@ function write(name: string, value?: string, permanent?: boolean) {
 export {
   read,
   write,
+  readCookie,
+  writeCookie,
+  readStorage,
+  writeStorage,
 };

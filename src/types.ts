@@ -95,6 +95,7 @@ type Client = {
   sendEvent(name: 'add-to-cart', request: AddToCartPublicEventRequest),
   sendEvent(name: 'update-cart', request: UpdateCartPublicEventRequest),
   sendEvent(name: 'view-page', request?: ViewPagePublicEventRequest),
+  listen(context?): void,
   isUserPersist: boolean,
 };
 
