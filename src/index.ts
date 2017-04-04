@@ -6,6 +6,23 @@ import { generateId } from './utils/generateId';
 import { validateSendEventParams, validateInitParams } from './validations';
 
 import {
+  isEvent,
+  getEventNode,
+  getClickSuggestionData,
+  getClickItemData,
+  getAddToCartData,
+  getViewPageData,
+  getPurchaseData,
+  getUpdateCartData,
+  getLineItemsData,
+  getViewPageFallbackData,
+  getPurchaseFallbackData,
+  writeClickThroughCookie,
+  readClickThroughCookie,
+  clearClickThroughCookie,
+} from './helpers/listenHelpers';
+
+import {
   Config,
   Client,
   User,
@@ -62,6 +79,63 @@ function init(config: Config): Client {
         user,
         properties,
         event: name,
+      });
+    },
+
+    listen(context?) {
+      const node = context || window.document;
+
+      node.addEventListener('click', (e) => {
+        const target = e.target;
+
+        if (isEvent('click-suggestion', target)) {
+          return writeClickThroughCookie('click-suggestion', getClickSuggestionData(target));
+        }
+
+        if (isEvent('click-item', target)) {
+          return writeClickThroughCookie('click-item', getClickItemData(target));
+        }
+
+        if (isEvent('add-to-cart', target)) {
+          return this.sendEvent('add-to-cart', getAddToCartData(target));
+        }
+      });
+
+      !context && window.document.addEventListener('DOMContentLoaded', () => {
+        const viewPageNode = getEventNode('view-page', window.document);
+        const purchaseNode = getEventNode('purchase', window.document);
+        const updateCartNode = getEventNode('update-cart', window.document);
+        const viewPageFallbackNode = document.querySelector('.findify_page_product');
+        const purchaseFallbackNode = document.querySelector('.findify_purchase_order');
+        const clickThroughCookie = readClickThroughCookie();
+
+        if (clickThroughCookie) {
+          clearClickThroughCookie();
+
+          const { type, request } = clickThroughCookie;
+
+          return this.sendEvent(type, request);
+        }
+
+        if (viewPageFallbackNode) {
+          return this.sendEvent('view-page', getViewPageFallbackData(viewPageFallbackNode));
+        }
+
+        if (purchaseFallbackNode) {
+          return this.sendEvent('purchase', getPurchaseFallbackData(purchaseFallbackNode));
+        }
+
+        if (isEvent('view-page', viewPageNode)) {
+          return this.sendEvent('view-page', getViewPageData(viewPageNode));
+        }
+
+        if (isEvent('purchase', purchaseNode)) {
+          return this.sendEvent('purchase', getPurchaseData(purchaseNode));
+        }
+
+        if (isEvent('update-cart', updateCartNode)) {
+          return this.sendEvent('update-cart', getUpdateCartData(updateCartNode));
+        }
       });
     },
   };
