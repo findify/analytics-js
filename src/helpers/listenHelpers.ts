@@ -62,12 +62,14 @@ const getPurchaseFallbackData = (node) => {
 
 const writeClickThroughCookie = (type, request) => {
   writeCookie(3E4, env.storage.ctKey, `${type}#${JSON.stringify(request)}`);
-}
+};
 
 const readClickThroughCookie = () => {
   const data = readCookie(env.storage.ctKey);
 
-  if (!data) return;
+  if (!data) {
+    return;
+  }
 
   const [type, requestString] = data.split('#');
 
@@ -75,11 +77,11 @@ const readClickThroughCookie = () => {
     type,
     request: JSON.parse(requestString),
   };
-}
+};
 
 const clearClickThroughCookie = () => {
   writeCookie(0, env.storage.ctKey);
-}
+};
 
 export {
   isEvent,
