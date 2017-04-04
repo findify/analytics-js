@@ -56,6 +56,7 @@ const getPurchaseFallbackData = (node) => {
   return {
     order_id: orderIdNode && orderIdNode.innerHTML,
     currency: currencyNode && currencyNode.innerHTML,
+    revenue: lineItems.reduce((amount, { unit_price }) => amount + parseFloat(unit_price), 0),
     line_items: lineItems,
   };
 };
