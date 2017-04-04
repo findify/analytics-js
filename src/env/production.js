@@ -5,5 +5,6 @@ module.exports = {
   storage: {
     visitKey: '_findify_visit',
     uniqKey: '_findify_uniq',
+    ctKey: '_findify_ct',
   },
 };
