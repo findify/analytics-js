@@ -10,15 +10,18 @@ const getClickSuggestionData = (node) => ({
 });
 const getClickItemData = (node) => ({
   item_id: node.getAttribute('data-findify-item-id'),
+  variant_item_id: node.getAttribute('data-findify-variant-item-id'),
   rid: node.getAttribute('data-findify-rid'),
 });
 const getAddToCartData = (node) => ({
   item_id: node.getAttribute('data-findify-item-id'),
+  variant_item_id: node.getAttribute('data-findify-variant-item-id'),
   rid: node.getAttribute('data-findify-rid'),
   quantity: node.getAttribute('data-findify-quantity'),
 });
 const getViewPageData = (node) => ({
   item_id: node.getAttribute('data-findify-item-id'),
+  variant_item_id: node.getAttribute('data-findify-variant-item-id'),
 });
 const getPurchaseData = (node) => ({
   order_id: node.getAttribute('data-findify-order-id'),
@@ -32,6 +35,7 @@ const getUpdateCartData = (node) => ({
 });
 const getLineItemsData = (nodeList) => Array.prototype.slice.call(nodeList).map((element) => ({
   item_id: element.getAttribute('data-findify-item-id'),
+  variant_item_id: element.getAttribute('data-findify-variant-item-id'),
   unit_price: element.getAttribute('data-findify-unit-price'),
   quantity: element.getAttribute('data-findify-quantity'),
 }));
