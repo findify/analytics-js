@@ -156,6 +156,8 @@ function init(config: Config): Client {
     getIdsData() {
       return idsData;
     },
+
+    writeClickThroughCookie,
   };
 }
 
@@ -169,5 +171,4 @@ const writeSid = () => storage.write(sidKey, generateId());
 
 export {
   init,
-  writeClickThroughCookie,
 }
