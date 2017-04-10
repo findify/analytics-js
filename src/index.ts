@@ -28,6 +28,7 @@ import {
   User,
   EventName,
   PublicEventRequest,
+  IdsData,
 } from './types';
 
 import env = require('./env');
@@ -37,7 +38,7 @@ function init(config: Config): Client {
 
   const initialSid = readSid();
   const initialUid = readUid();
-  let idsData = {};
+  let idsData = ({} as IdsData);
 
   if (!initialSid) {
     writeSid();

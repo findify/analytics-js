@@ -76,6 +76,11 @@ type InternalEventRequest = (
   ViewPageInternalEventRequest
 );
 
+type IdsData = {
+  item_id?: string,
+  item_ids?: string[],
+};
+
 type EventName = (
   'click-suggestion' |
   'click-item' |
@@ -96,6 +101,7 @@ type Client = {
   sendEvent(name: 'update-cart', request: UpdateCartPublicEventRequest),
   sendEvent(name: 'view-page', request?: ViewPagePublicEventRequest),
   listen(context?): void,
+  getIdsData(): IdsData,
   isUserPersist: boolean,
 };
 
@@ -106,6 +112,7 @@ export {
   EventName,
   PublicEventRequest,
   InternalEventRequest,
+  IdsData,
 
   ClickSuggestionPublicEventRequest,
   ClickItemPublicEventRequest,
