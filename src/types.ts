@@ -102,6 +102,7 @@ type Client = {
   sendEvent(name: 'view-page', request?: ViewPagePublicEventRequest),
   listen(context?): void,
   getIdsData(): IdsData,
+  writeClickThroughCookie(): void,
   isUserPersist: boolean,
 };
 
