@@ -37,6 +37,7 @@ function init(config: Config): Client {
 
   const initialSid = readSid();
   const initialUid = readUid();
+  let idsData = {};
 
   if (!initialSid) {
     writeSid();
@@ -109,36 +110,50 @@ function init(config: Config): Client {
           const viewPageFallbackNode = document.querySelector('.findify_page_product');
           const purchaseFallbackNode = document.querySelector('.findify_purchase_order');
           const clickThroughCookie = readClickThroughCookie();
+          const getItemsIds = (items) => items.map((item) => item.item_id);
 
           if (clickThroughCookie) {
             clearClickThroughCookie();
 
             const { type, request } = clickThroughCookie;
 
-            return this.sendEvent(type, request);
+            this.sendEvent(type, request);
           }
 
           if (viewPageFallbackNode) {
-            return this.sendEvent('view-page', getViewPageFallbackData(viewPageFallbackNode));
+            this.sendEvent('view-page', getViewPageFallbackData(viewPageFallbackNode));
           }
 
           if (purchaseFallbackNode) {
-            return this.sendEvent('purchase', getPurchaseFallbackData(purchaseFallbackNode));
+            this.sendEvent('purchase', getPurchaseFallbackData(purchaseFallbackNode));
           }
 
           if (isEvent('view-page', viewPageNode)) {
-            return this.sendEvent('view-page', getViewPageData(viewPageNode));
+            const viewPageData = getViewPageData(viewPageNode);
+
+            idsData.item_id = viewPageData.item_id;
+
+            this.sendEvent('view-page', viewPageData);
           }
 
           if (isEvent('purchase', purchaseNode)) {
-            return this.sendEvent('purchase', getPurchaseData(purchaseNode));
+            this.sendEvent('purchase', getPurchaseData(purchaseNode));
           }
 
           if (isEvent('update-cart', updateCartNode)) {
-            return this.sendEvent('update-cart', getUpdateCartData(updateCartNode));
+            const updateCartData = getUpdateCartData(updateCartNode);
+            const itemsIds = getItemsIds(updateCartData.line_items);
+
+            idsData.item_ids = itemsIds;
+
+            this.sendEvent('update-cart', updateCartData);
           }
         });
       }
+    },
+
+    getIdsData() {
+      return idsData;
     },
   };
 }
@@ -153,4 +168,5 @@ const writeSid = () => storage.write(sidKey, generateId());
 
 export {
   init,
+  writeClickThroughCookie,
 }
