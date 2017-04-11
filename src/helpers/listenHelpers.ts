@@ -1,4 +1,5 @@
 import { readCookie, writeCookie } from '../modules/storage';
+import { cleanObject } from '../utils/cleanObject';
 import env = require('../env');
 
 const isEvent = (name, node) => node && node.getAttribute('data-findify-event') === name;
@@ -33,7 +34,7 @@ const getPurchaseData = (node) => ({
 const getUpdateCartData = (node) => ({
   line_items: getLineItemsData(node.children),
 });
-const getLineItemsData = (nodeList) => Array.prototype.slice.call(nodeList).map((element) => ({
+const getLineItemsData = (nodeList) => Array.prototype.slice.call(nodeList).map((element) => cleanObject({
   item_id: element.getAttribute('data-findify-item-id'),
   variant_item_id: element.getAttribute('data-findify-variant-item-id'),
   unit_price: element.getAttribute('data-findify-unit-price'),
