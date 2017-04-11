@@ -1,12 +1,13 @@
 import * as qs from 'qs';
 import { User, EventName, InternalEventRequest } from '../types';
+import { cleanObject } from '../utils/cleanObject';
 
 import env = require('../env');
 
 function requestApi(data: Data) {
   return new Promise((resolve, reject) => {
     const queryString = qs.stringify({
-      ...data,
+      ...cleanObject(data),
       t_client: Date.now(),
     });
     const image = window.document.createElement('img');
