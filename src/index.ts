@@ -76,7 +76,7 @@ function init(config: Config): Client {
         height: window.screen.height,
       } : request;
 
-      requestApi({
+      return requestApi({
         key,
         user,
         properties,
@@ -104,7 +104,7 @@ function init(config: Config): Client {
       });
 
       if (!context) {
-        window.document.addEventListener('DOMContentLoaded', () => {
+        const init = () => {
           const viewPageNode = getEventNode('view-page', window.document);
           const purchaseNode = getEventNode('purchase', window.document);
           const updateCartNode = getEventNode('update-cart', window.document);
@@ -149,7 +149,13 @@ function init(config: Config): Client {
 
             this.sendEvent('update-cart', updateCartData);
           }
-        });
+        };
+
+        if (['complete', 'loaded', 'interactive'].indexOf(document.readyState) > -1 && document.body) {
+          init();
+        } else {
+          document.addEventListener('DOMContentLoaded', init, false);
+        }
       }
     },
 
