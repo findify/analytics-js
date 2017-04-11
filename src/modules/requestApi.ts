@@ -17,7 +17,7 @@ function requestApi(data: Data) {
 
     image.onerror = () => {
       reject();
-    }
+    };
 
     image.src = makeSrc(queryString);
   });
