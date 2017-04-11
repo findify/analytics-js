@@ -4,13 +4,19 @@ import { User, EventName, InternalEventRequest } from '../types';
 import env = require('../env');
 
 function requestApi(data: Data) {
-  const queryString = qs.stringify({
-    ...data,
-    t_client: Date.now(),
-  });
-  const image = window.document.createElement('img');
+  return new Promise((resolve, reject) => {
+    const queryString = qs.stringify({
+      ...data,
+      t_client: Date.now(),
+    });
+    const image = window.document.createElement('img');
 
-  image.src = makeSrc(queryString);
+    image.onload = function() {
+      resolve();
+    }
+
+    image.src = makeSrc(queryString);
+  });
 }
 
 function makeSrc(queryString: string) {
