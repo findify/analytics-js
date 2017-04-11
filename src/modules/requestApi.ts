@@ -11,9 +11,9 @@ function requestApi(data: Data) {
     });
     const image = window.document.createElement('img');
 
-    image.onload = function() {
+    image.onload = () => {
       resolve();
-    }
+    };
 
     image.src = makeSrc(queryString);
   });
