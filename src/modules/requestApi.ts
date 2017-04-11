@@ -15,6 +15,10 @@ function requestApi(data: Data) {
       resolve();
     };
 
+    image.onerror = () => {
+      reject();
+    }
+
     image.src = makeSrc(queryString);
   });
 }
