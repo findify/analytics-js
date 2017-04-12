@@ -3,6 +3,7 @@ import * as storage from './modules/storage';
 
 import { requestApi } from './modules/requestApi';
 import { generateId } from './utils/generateId';
+import { cleanObject } from './utils/cleanObject';
 import { validateSendEventParams, validateInitParams } from './validations';
 
 import {
@@ -79,7 +80,7 @@ function init(config: Config): Client {
       return requestApi({
         key,
         user,
-        properties,
+        properties: cleanObject(properties),
         event: name,
       });
     },

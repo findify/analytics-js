@@ -4,7 +4,7 @@ import * as isNull from 'lodash/isNull';
 
 function cleanObject(obj: InputObject) {
   return reduce(obj, (acc: InputObject, value: any, key: string) => (
-    typeof value === 'undefined' || isNull(value) ? (
+    typeof value === 'undefined' || isNull(value) || value === '' ? (
       acc
     ) : (
       assign({}, acc, {
