@@ -29,6 +29,7 @@ import {
   User,
   EventName,
   PublicEventRequest,
+  InternalEventRequest,
   IdsData,
 } from './types';
 
@@ -80,7 +81,7 @@ function init(config: Config): Client {
       return requestApi({
         key,
         user,
-        properties: cleanObject(properties),
+        properties: (cleanObject(properties)) as InternalEventRequest,
         event: name,
       });
     },
