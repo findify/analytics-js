@@ -137,6 +137,8 @@ function init(config: Config): Client {
             idsData.item_id = viewPageData.item_id;
 
             this.sendEvent('view-page', viewPageData);
+          } else {
+            this.sendEvent('view-page', {});
           }
 
           if (isEvent('purchase', purchaseNode)) {
