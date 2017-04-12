@@ -123,20 +123,22 @@ function init(config: Config): Client {
             this.sendEvent(type, request);
           }
 
-          if (viewPageFallbackNode) {
-            this.sendEvent('view-page', getViewPageFallbackData(viewPageFallbackNode));
-          }
-
           if (purchaseFallbackNode) {
             this.sendEvent('purchase', getPurchaseFallbackData(purchaseFallbackNode));
           }
 
-          if (isEvent('view-page', viewPageNode)) {
-            const viewPageData = getViewPageData(viewPageNode);
+          if (isEvent('view-page', viewPageNode) || viewPageFallbackNode) {
+            if (isEvent('view-page', viewPageNode)) {
+              const viewPageData = getViewPageData(viewPageNode);
 
-            idsData.item_id = viewPageData.item_id;
+              idsData.item_id = viewPageData.item_id;
 
-            this.sendEvent('view-page', viewPageData);
+              this.sendEvent('view-page', viewPageData);
+            }
+
+            if (viewPageFallbackNode) {
+              this.sendEvent('view-page', getViewPageFallbackData(viewPageFallbackNode));
+            }
           } else {
             this.sendEvent('view-page', {});
           }
