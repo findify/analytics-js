@@ -137,7 +137,11 @@ function init(config: Config): Client {
             }
 
             if (viewPageFallbackNode) {
-              this.sendEvent('view-page', getViewPageFallbackData(viewPageFallbackNode));
+              const viewPageData = getViewPageFallbackData(viewPageFallbackNode);
+
+              idsData.item_id = viewPageData.item_id;
+
+              this.sendEvent('view-page', viewPageData);
             }
           } else {
             this.sendEvent('view-page', {});
