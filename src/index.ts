@@ -1,4 +1,5 @@
 import * as has from 'lodash/has';
+import * as isEqual from 'lodash/isEqual';
 import * as storage from './modules/storage';
 
 import { requestApi } from './modules/requestApi';
@@ -159,10 +160,17 @@ function init(config: Config): Client {
           if (isEvent('update-cart', updateCartNode)) {
             const updateCartData = getUpdateCartData(updateCartNode);
             const itemsIds = getItemsIds(updateCartData.line_items);
+            const storageCart = readCart();
+            const parsed = storageCart && JSON.parse(storageCart);
+            const isCartUpdated = !isEqual(parsed, updateCartData);
 
-            idsData.item_ids = itemsIds;
+            if (isCartUpdated) {
+              idsData.item_ids = itemsIds;
 
-            this.sendEvent('update-cart', updateCartData);
+              this.sendEvent('update-cart', updateCartData);
+
+              writeCart(JSON.stringify(updateCartData));
+            }
           }
         };
 
@@ -184,11 +192,14 @@ function init(config: Config): Client {
 
 const uidKey = env.storage.uniqKey;
 const sidKey = env.storage.visitKey;
+const cartKey = env.storage.cartKey;
 
 const readUid = () => storage.read(uidKey);
 const readSid = () => storage.read(sidKey);
 const writeUid = () => storage.write(uidKey, generateId(), true);
 const writeSid = () => storage.write(sidKey, generateId());
+const readCart = () => storage.read(cartKey);
+const writeCart = (data) => storage.write(cartKey, data);
 
 export {
   init,
