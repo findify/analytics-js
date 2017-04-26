@@ -11,7 +11,7 @@ function validateInitParams(config: Config) {
   }
 }
 
-function validateSendEventParams(name: EventName, request) {
+function validateSendEventParams(name: EventName, request, config: Config) {
   if ([
     'click-suggestion',
     'click-item',
@@ -53,28 +53,30 @@ function validateSendEventParams(name: EventName, request) {
       throw new Error('"order_id" param is required');
     }
 
-    if (!has(request, 'currency')) {
-      throw new Error('"currency" param is required');
-    }
+    if (config.platform !== 'bigcommerce') {
+      if (!has(request, 'currency')) {
+        throw new Error('"currency" param is required');
+      }
 
-    if (!has(request, 'revenue')) {
-      throw new Error('"revenue" param is required');
-    }
+      if (!has(request, 'revenue')) {
+        throw new Error('"revenue" param is required');
+      }
 
-    if (!has(request, 'line_items')) {
-      throw new Error('"line_items" param is required');
-    }
+      if (!has(request, 'line_items')) {
+        throw new Error('"line_items" param is required');
+      }
 
-    if (!(request).line_items.every((item) => !! item.item_id)) {
-      throw new Error('"line_items[].item_id" param is required');
-    }
+      if (!(request).line_items.every((item) => !! item.item_id)) {
+        throw new Error('"line_items[].item_id" param is required');
+      }
 
-    if (!(request).line_items.every((item) => !! item.unit_price)) {
-      throw new Error('"line_items[].unit_price" param is required');
-    }
+      if (!(request).line_items.every((item) => !! item.unit_price)) {
+        throw new Error('"line_items[].unit_price" param is required');
+      }
 
-    if (!(request).line_items.every((item) => !! item.quantity)) {
-      throw new Error('"line_items[].quantity" param is required');
+      if (!(request).line_items.every((item) => !! item.quantity)) {
+        throw new Error('"line_items[].quantity" param is required');
+      }
     }
   }
 

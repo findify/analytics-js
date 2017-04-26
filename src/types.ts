@@ -4,6 +4,7 @@ type User = {
 };
 type Config = {
   key: string,
+  platform?: 'bigcommerce' | 'shopify',
 };
 
 type LineItemData = {

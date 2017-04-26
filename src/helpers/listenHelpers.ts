@@ -58,12 +58,14 @@ const getPurchaseFallbackData = (node) => {
     };
   });
 
-  return {
+  return cleanObject({
     order_id: orderIdNode && orderIdNode.innerHTML,
-    currency: currencyNode && currencyNode.innerHTML,
-    revenue: lineItems.reduce((amount, { unit_price }) => amount + parseFloat(unit_price), 0),
-    line_items: lineItems,
-  };
+    currency: currencyNode ? currencyNode.innerHTML : undefined,
+    revenue: lineItems.length ? lineItems.reduce(
+      (amount, { unit_price }) => amount + parseFloat(unit_price), 0
+    ) : undefined,
+    line_items: lineItems.length ? lineItems : undefined,
+  });
 };
 
 const writeClickThroughCookie = (type, request) => {

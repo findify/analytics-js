@@ -7,4 +7,5 @@ module.exports = {
     uniqKey: '_findify_uniq',
     ctKey: '_findify_ct',
   },
+  bigcommerceTrackingUrl: 'https://order.findify.io/bigcommerce',
 };

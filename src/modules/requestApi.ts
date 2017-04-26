@@ -3,7 +3,7 @@ import { User, EventName, InternalEventRequest } from '../types';
 
 import env = require('../env');
 
-function requestApi(data: Data) {
+function requestApi(data: Data, endpoint?: string) {
   return new Promise((resolve, reject) => {
     const queryString = qs.stringify({
       ...data,
@@ -19,12 +19,16 @@ function requestApi(data: Data) {
       resolve();
     };
 
-    image.src = makeSrc(queryString);
+    image.src = makeSrc(queryString, endpoint);
   });
 }
 
-function makeSrc(queryString: string) {
-  return env.searchApi.url + '/feedback?' + queryString;
+function makeSrc(queryString: string, endpoint?: string) {
+  return !endpoint ? (
+    env.searchApi.url + '/feedback?' + queryString
+  ) : (
+    endpoint + '?' + queryString
+  );
 }
 
 type Data = {

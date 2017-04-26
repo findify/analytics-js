@@ -60,8 +60,8 @@ function init(config: Config): Client {
       return uid && sid ? { uid, sid } : undefined;
     },
 
-    sendEvent(name: EventName, request?) {
-      validateSendEventParams(name, request);
+    sendEvent(name: EventName, request?, endpoint?: string) {
+      validateSendEventParams(name, request, config);
 
       const user = this.getUser();
       const { key } = config;
@@ -83,7 +83,7 @@ function init(config: Config): Client {
         user,
         properties: (cleanObject(properties)) as InternalEventRequest,
         event: name,
-      });
+      }, endpoint);
     },
 
     listen(context?) {
@@ -124,7 +124,12 @@ function init(config: Config): Client {
           }
 
           if (purchaseFallbackNode) {
-            this.sendEvent('purchase', getPurchaseFallbackData(purchaseFallbackNode));
+            const data = getPurchaseFallbackData(purchaseFallbackNode);
+            if (config.platform === 'bigcommerce') {
+              this.sendEvent('purchase', data, env.bigcommerceTrackingUrl);
+            } else {
+              this.sendEvent('purchase', data);
+            }
           }
 
           if (isEvent('view-page', viewPageNode) || viewPageFallbackNode) {
