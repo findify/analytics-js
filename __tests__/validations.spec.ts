@@ -4,6 +4,10 @@ import * as validations from '../src/validations';
 const { validateInitParams, validateSendEventParams }: any = validations;
 
 describe('validations', () => {
+  const config = {
+    key: 'test',
+  };
+
   describe('validateInitParams', () => {
     it('should throw an Error if "key" is not provided', () => {
       expect(() => validateInitParams()).toThrow(/"key" param is required/);
@@ -59,7 +63,7 @@ describe('validations', () => {
           unit_price: 100,
           quantity: 2,
         }],
-      })).toThrow(/"order_id" param is required/);
+      }, config)).toThrow(/"order_id" param is required/);
     });
 
     it('should throw an Error if "currency" is not provided at "purchase" event', () => {
@@ -71,7 +75,7 @@ describe('validations', () => {
           unit_price: 100,
           quantity: 2,
         }],
-      })).toThrow(/"currency" param is required/);
+      }, config)).toThrow(/"currency" param is required/);
     });
 
     it('should throw an Error if "revenue" is not provided at "purchase" event', () => {
@@ -83,7 +87,7 @@ describe('validations', () => {
           unit_price: 100,
           quantity: 2,
         }],
-      })).toThrow(/"revenue" param is required/);
+      }, config)).toThrow(/"revenue" param is required/);
     });
 
     it('should throw an Error if "line_items" is not provided at "purchase" event', () => {
@@ -91,7 +95,7 @@ describe('validations', () => {
         order_id: 'testOrderId',
         currency: 'testCurrency',
         revenue: 100,
-      })).toThrow(/"line_items" param is required/);
+      }, config)).toThrow(/"line_items" param is required/);
     });
 
     it('should throw an Error if "line_items[].item_id" is not provided at "purchase" event', () => {
@@ -107,7 +111,7 @@ describe('validations', () => {
           unit_price: 100,
           quantity: 2,
         }],
-      })).toThrow(/"line_items\[\]\.item_id" param is required/);
+      }, config)).toThrow(/"line_items\[\]\.item_id" param is required/);
     });
 
     it('should throw an Error if "line_items[].unit_price" is not provided at "purchase" event', () => {
@@ -123,7 +127,7 @@ describe('validations', () => {
           item_id: 'testItemId2',
           quantity: 2,
         }],
-      })).toThrow(/"line_items\[\]\.unit_price" param is required/);
+      }, config)).toThrow(/"line_items\[\]\.unit_price" param is required/);
     });
 
     it('should throw an Error if "line_items[].quantity" is not provided at "purchase" event', () => {
@@ -139,7 +143,7 @@ describe('validations', () => {
           item_id: 'testItemId2',
           unit_price: 100,
         }],
-      })).toThrow(/"line_items\[\]\.quantity" param is required/);
+      }, config)).toThrow(/"line_items\[\]\.quantity" param is required/);
     });
 
     it('should throw an Error if "item_id" is not provided at "add-to-cart" event', () => {
