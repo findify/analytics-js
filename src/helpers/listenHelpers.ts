@@ -61,8 +61,8 @@ const getPurchaseFallbackData = (node) => {
   return cleanObject({
     order_id: orderIdNode && orderIdNode.innerHTML,
     currency: currencyNode ? currencyNode.innerHTML : undefined,
-    revenue: lineItems.length ? lineItems.reduce(
-      (amount, { unit_price }) => amount + parseFloat(unit_price), 0
+    revenue: lineItems.length ? (
+      lineItems.reduce((amount, { unit_price }) => amount + parseFloat(unit_price), 0)
     ) : undefined,
     line_items: lineItems.length ? lineItems : undefined,
   });
