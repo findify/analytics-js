@@ -93,6 +93,7 @@ type EventName = (
 );
 
 type Client = {
+  isUserPersist: boolean,
   getUser(): User,
   sendEvent(name: 'click-suggestion', request: ClickSuggestionPublicEventRequest),
   sendEvent(name: 'click-item', request: ClickItemPublicEventRequest),
@@ -104,7 +105,6 @@ type Client = {
   listen(context?): void,
   getIdsData(): IdsData,
   writeClickThroughCookie(type: string, request: any): void,
-  isUserPersist: boolean,
 };
 
 export {
