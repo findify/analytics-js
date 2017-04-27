@@ -164,9 +164,9 @@ function init(config: Config): Client {
             const parsed = storageCart && JSON.parse(storageCart);
             const isCartUpdated = !isEqual(parsed, updateCartData);
 
-            if (isCartUpdated) {
-              idsData.item_ids = itemsIds;
+            idsData.item_ids = itemsIds;
 
+            if (isCartUpdated) {
               this.sendEvent('update-cart', updateCartData);
 
               writeCart(JSON.stringify(updateCartData));
