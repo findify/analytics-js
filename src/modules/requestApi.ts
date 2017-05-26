@@ -6,7 +6,7 @@ import env = require('../env');
 function requestApi(data: Data, endpoint?: string) {
   return new Promise((resolve, reject) => {
     const queryString = qs.stringify({ ...data, t_client: Date.now() });
-    const image = new Image(1, 1);
+    const image = window.document.createElement('img');
 
     image.onload = resolve;
     image.onerror = resolve;
@@ -24,7 +24,7 @@ type Data = {
   key: string,
   user: User,
   event: EventName,
-  properties?: InternalEventRequest,
+  properties: InternalEventRequest,
 };
 
 export {
