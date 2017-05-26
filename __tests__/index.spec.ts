@@ -39,8 +39,11 @@ describe('init', () => {
 
       delete window.document.cookie;
       (window as any).localStorage = undefined;
-
-      expect(analytics.getUser()).toBe(undefined);
+      const user = analytics.getUser();
+      expect(user.exist).toBe(false);
+      expect(user.persist).toBe(false);
+      expect(user.sid).toBe(void 0);
+      expect(user.uid).toBe(void 0);
     });
 
     it('should return user object from storage', () => {
@@ -59,6 +62,8 @@ describe('init', () => {
     const getUser = () => ({
       uid: window.localStorage.getItem('_findify_uniq'),
       sid: window.localStorage.getItem('_findify_visit'),
+      exist: 'true',
+      persist: 'false',
     });
 
     it('should not send event if user was disabled cookies and localStorage', (done) => {
