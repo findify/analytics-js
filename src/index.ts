@@ -1,6 +1,7 @@
 import * as has from 'lodash/has';
 import * as isEqual from 'lodash/isEqual';
 import * as storage from './modules/storage';
+import * as assign from 'lodash/assign';
 
 import { requestApi } from './modules/requestApi';
 import { generateId } from './utils/generateId';
@@ -44,10 +45,12 @@ import env = require('./env');
 
 const cleanProperties = (props) => cleanObject(props);
 
-function init(config: Config): Client {
-  validateInitParams(config);
+function init(cfg: Config): Client {
+  const config = assign({}, cfg, {
+    platform: cfg.platform || {}
+  });
 
-  config.platform = config.platform || {};
+  validateInitParams(config);
 
   const initialSid = readSid();
   const initialUid = readUid();
@@ -136,7 +139,7 @@ function init(config: Config): Client {
           if (purchaseFallbackNode) {
             const data = getPurchaseFallbackData(purchaseFallbackNode);
             this.sendEvent('purchase', data,
-              config.platform.bigcommerce && env.bigcommerceTrackingUrl || void 0
+              config.platform.bigcommerce ? env.bigcommerceTrackingUrl : void 0
             );
           }
 

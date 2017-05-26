@@ -53,7 +53,7 @@ function validateSendEventParams(name: EventName, request, config: Config) {
       throw new Error('"order_id" param is required');
     }
 
-    if (config.platform !== 'bigcommerce') {
+    if (!config.platform || !config.platform.bigcommerce) {
       if (!has(request, 'currency')) {
         throw new Error('"currency" param is required');
       }
