@@ -6,7 +6,7 @@ type User = {
 };
 type Config = {
   key: string,
-  platform: {
+  platform?: {
     bigcommerce?: boolean,
     shopify?: boolean
   }
