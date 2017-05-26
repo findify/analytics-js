@@ -10,6 +10,7 @@ import { validateSendEventParams, validateInitParams } from './validations';
 import {
   isEvent,
   getEventNode,
+  getFilterNodes,
   getClickSuggestionData,
   getClickItemData,
   getAddToCartData,
@@ -25,6 +26,10 @@ import {
 } from './helpers/listenHelpers';
 
 import {
+  convertFilterNodesToArray
+} from './helpers/filtersHelpers';
+
+import {
   Config,
   Client,
   User,
@@ -32,33 +37,37 @@ import {
   PublicEventRequest,
   InternalEventRequest,
   IdsData,
+  FiltersData,
 } from './types';
 
 import env = require('./env');
 
+const cleanProperties = (props) => cleanObject(props);
+
 function init(config: Config): Client {
   validateInitParams(config);
+
+  config.platform = config.platform || {};
 
   const initialSid = readSid();
   const initialUid = readUid();
   let idsData = ({} as IdsData);
+  let filtersData = ([] as FiltersData[]);
 
-  if (!initialSid) {
-    writeSid();
-  }
-
-  if (!initialUid) {
-    writeUid();
-  }
+  if (!initialSid) writeSid();
+  if (!initialUid) writeUid();
 
   return {
-    isUserPersist: !!(initialSid && initialUid),
-
     getUser(): User {
       const uid = readUid();
       const sid = readSid();
 
-      return uid && sid ? { uid, sid } : undefined;
+      return {
+        uid,
+        sid,
+        exist: !!(uid && sid),
+        persist: !!(initialSid && initialUid)
+      }
     },
 
     sendEvent(name: EventName, request?, endpoint?: string) {
@@ -67,9 +76,7 @@ function init(config: Config): Client {
       const user = this.getUser();
       const { key } = config;
 
-      if (!user) {
-        return;
-      }
+      if (!user.exist) return;
 
       const properties = name === 'view-page' ? {
         ...request,
@@ -82,13 +89,13 @@ function init(config: Config): Client {
       return requestApi({
         key,
         user,
-        properties: (cleanObject(properties)) as InternalEventRequest,
+        properties: (cleanObject(properties) as InternalEventRequest),
         event: name,
       }, endpoint);
     },
 
     listen(context?) {
-      const node = context || window.document;
+      const node = context || document;
 
       node.addEventListener('click', (e) => {
         const target = e.target;
@@ -108,11 +115,13 @@ function init(config: Config): Client {
 
       if (!context) {
         const init = () => {
-          const viewPageNode = getEventNode('view-page', window.document);
-          const purchaseNode = getEventNode('purchase', window.document);
-          const updateCartNode = getEventNode('update-cart', window.document);
-          const viewPageFallbackNode = document.querySelector('.findify_page_product');
-          const purchaseFallbackNode = document.querySelector('.findify_purchase_order');
+          const viewPageNode = getEventNode('view-page', node);
+          const filterNodes = getFilterNodes(node);
+          const purchaseNode = getEventNode('purchase', node);
+          const updateCartNode = getEventNode('update-cart', node);
+          const viewPageFallbackNode = node.querySelector('.findify_page_product');
+          const purchaseFallbackNode = node.querySelector('.findify_purchase_order');
+
           const clickThroughCookie = readClickThroughCookie();
           const getItemsIds = (items) => items.map((item) => item.item_id);
 
@@ -126,11 +135,13 @@ function init(config: Config): Client {
 
           if (purchaseFallbackNode) {
             const data = getPurchaseFallbackData(purchaseFallbackNode);
-            if (config.platform === 'bigcommerce') {
-              this.sendEvent('purchase', data, env.bigcommerceTrackingUrl);
-            } else {
-              this.sendEvent('purchase', data);
-            }
+            this.sendEvent('purchase', data,
+              config.platform.bigcommerce && env.bigcommerceTrackingUrl || void 0
+            );
+          }
+
+          if (filterNodes.length) {
+            filtersData = convertFilterNodesToArray(filterNodes);
           }
 
           if (isEvent('view-page', viewPageNode) || viewPageFallbackNode) {
@@ -184,6 +195,10 @@ function init(config: Config): Client {
 
     getIdsData() {
       return idsData;
+    },
+
+    getFiltersData() {
+      return filtersData;
     },
 
     writeClickThroughCookie,

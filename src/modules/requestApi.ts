@@ -5,37 +5,26 @@ import env = require('../env');
 
 function requestApi(data: Data, endpoint?: string) {
   return new Promise((resolve, reject) => {
-    const queryString = qs.stringify({
-      ...data,
-      t_client: Date.now(),
-    });
-    const image = window.document.createElement('img');
+    const queryString = qs.stringify({ ...data, t_client: Date.now() });
+    const image = new Image(1, 1);
 
-    image.onload = () => {
-      resolve();
-    };
-
-    image.onerror = () => {
-      resolve();
-    };
+    image.onload = resolve;
+    image.onerror = resolve;
 
     image.src = makeSrc(queryString, endpoint);
   });
 }
 
 function makeSrc(queryString: string, endpoint?: string) {
-  return !endpoint ? (
-    env.searchApi.url + '/feedback?' + queryString
-  ) : (
-    endpoint + '?' + queryString
-  );
+  if (!endpoint) return env.searchApi.url + '/feedback?' + queryString;
+  return endpoint + '?' + queryString;
 }
 
 type Data = {
   key: string,
   user: User,
   event: EventName,
-  properties: InternalEventRequest,
+  properties?: InternalEventRequest,
 };
 
 export {

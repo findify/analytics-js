@@ -1,10 +1,15 @@
 type User = {
   uid: string,
   sid: string,
+  exist: boolean,
+  persist: boolean
 };
 type Config = {
   key: string,
-  platform?: 'bigcommerce' | 'shopify',
+  platform: {
+    bigcommerce?: boolean,
+    shopify?: boolean
+  }
 };
 
 type LineItemData = {
@@ -82,6 +87,11 @@ type IdsData = {
   item_ids?: string[],
 };
 
+type FiltersData = {
+  name?: string,
+  value?: any[],
+};
+
 type EventName = (
   'click-suggestion' |
   'click-item' |
@@ -93,7 +103,6 @@ type EventName = (
 );
 
 type Client = {
-  isUserPersist: boolean,
   getUser(): User,
   sendEvent(name: 'click-suggestion', request: ClickSuggestionPublicEventRequest),
   sendEvent(name: 'click-item', request: ClickItemPublicEventRequest),
@@ -104,6 +113,7 @@ type Client = {
   sendEvent(name: 'view-page', request?: ViewPagePublicEventRequest),
   listen(context?): void,
   getIdsData(): IdsData,
+  getFiltersData(): FiltersData[],
   writeClickThroughCookie(type: string, request: any): void,
 };
 
@@ -115,6 +125,7 @@ export {
   PublicEventRequest,
   InternalEventRequest,
   IdsData,
+  FiltersData,
 
   ClickSuggestionPublicEventRequest,
   ClickItemPublicEventRequest,
