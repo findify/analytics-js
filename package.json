@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rimraf ./lib ./dist",
     "lint": "tslint --project .",
-    "check": "npm run test && npm run build && npm run lint && npm run clean",
+    "check": "npm run test && npm run build && npm run clean",
     "test": "mocha --compilers ts:ts-node/register --recursive -R min  ./__tests__",
     "build:commonjs": "tsc --project . && cpx './src/env/*.js' ./lib/env",
     "build:umd": "cross-env FINDIFY_ENV=production NODE_ENV=development webpack src/index.ts dist/prod/findify-analytics.js",
