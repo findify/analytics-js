@@ -180,15 +180,13 @@ const init = (cfg: Config): Client => {
             const updateCartData = getUpdateCartData(updateCartNode);
             const itemsIds = getItemsIds(updateCartData.line_items);
             const storageCart = readCart();
-            const parsed = storageCart && JSON.parse(storageCart);
-            const isCartUpdated = !isEqual(parsed, updateCartData);
+            const isCartUpdated = !isEqual(storageCart, updateCartData);
 
             idsData.item_ids = itemsIds;
 
             if (isCartUpdated) {
               this.sendEvent('update-cart', updateCartData);
-
-              writeCart(JSON.stringify(updateCartData));
+              writeCart(updateCartData);
             }
           }
         };
