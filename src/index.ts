@@ -1,8 +1,6 @@
-import * as has from 'lodash/has';
 import * as isEqual from 'lodash/isEqual';
-import * as storage from './modules/storage';
-import * as assign from 'lodash/assign';
 
+import * as storage from './modules/storage';
 import { requestApi } from './modules/requestApi';
 import { generateId } from './utils/generateId';
 import { cleanObject } from './utils/cleanObject';
@@ -43,12 +41,19 @@ import {
 
 import env = require('./env');
 
-const cleanProperties = (props) => cleanObject(props);
+const uidKey = env.storage.uniqKey;
+const sidKey = env.storage.visitKey;
+const cartKey = env.storage.cartKey;
 
-function init(cfg: Config): Client {
-  const config = assign({}, cfg, {
-    platform: cfg.platform || {}
-  });
+const readUid = () => storage.read(uidKey);
+const readSid = () => storage.read(sidKey);
+const writeUid = () => storage.write(uidKey, generateId(), true);
+const writeSid = () => storage.write(sidKey, generateId());
+const readCart = () => storage.read(cartKey);
+const writeCart = (data) => storage.write(cartKey, data);
+
+const init = (cfg: Config): Client => {
+  const config = { ...cfg, platform: cfg.platform || {} };
 
   validateInitParams(config);
 
@@ -110,7 +115,7 @@ function init(cfg: Config): Client {
         if (isEvent('click-item', target)) {
           return writeClickThroughCookie('click-item', getClickItemData(target));
         }
-
+        
         if (isEvent('add-to-cart', target)) {
           return this.sendEvent('add-to-cart', getAddToCartData(target));
         }
@@ -207,17 +212,6 @@ function init(cfg: Config): Client {
     writeClickThroughCookie,
   };
 }
-
-const uidKey = env.storage.uniqKey;
-const sidKey = env.storage.visitKey;
-const cartKey = env.storage.cartKey;
-
-const readUid = () => storage.read(uidKey);
-const readSid = () => storage.read(sidKey);
-const writeUid = () => storage.write(uidKey, generateId(), true);
-const writeSid = () => storage.write(sidKey, generateId());
-const readCart = () => storage.read(cartKey);
-const writeCart = (data) => storage.write(cartKey, data);
 
 export {
   init,

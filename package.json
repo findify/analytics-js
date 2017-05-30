@@ -35,7 +35,8 @@
   "dependencies": {
     "js-cookie": "^2.1.3",
     "lodash": "^4.17.4",
-    "qs": "^6.3.0"
+    "qs": "^6.3.0",
+    "store": "^2.0.4"
   },
   "devDependencies": {
     "@types/es6-shim": "^0.31.32",

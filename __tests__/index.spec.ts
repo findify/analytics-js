@@ -5,11 +5,14 @@ import * as url from 'url';
 import { setupJsDom, teardownJsDom } from './jsdom-helper';
 import { init } from '../src/index';
 
+import * as store from 'store';
+
 describe('init', () => {
   const runInit = () => init({ key: 'testKey' });
 
   beforeEach((done) => {
     fauxJax.install();
+    store.clearAll();
     setupJsDom(done);
   });
   afterEach(() => {
@@ -17,28 +20,11 @@ describe('init', () => {
     teardownJsDom();
   });
 
-  describe('generic', () => {
-    it('should set session id if it`s not exists or expired', () => {
-      runInit();
-
-      expect(window.document.cookie).toMatch(/_findify_visit.*;/);
-      expect(window.localStorage.getItem('_findify_visit')).toExist();
-    });
-
-    it('should set user id if it`s not exists or expired', () => {
-      runInit();
-
-      expect(window.document.cookie).toMatch(/_findify_uniq.*;/);
-      expect(window.localStorage.getItem('_findify_uniq')).toExist();
-    });
-  });
-
   describe('getUser', () => {
     it('should return "undefined" ether user id or session id is "undefined"', () => {
       const analytics = runInit();
 
-      delete window.document.cookie;
-      (window as any).localStorage = undefined;
+      store.clearAll();
       const user = analytics.getUser();
       expect(user.exist).toBe(false);
       expect(user.persist).toBe(false);
@@ -48,7 +34,6 @@ describe('init', () => {
 
     it('should return user object from storage', () => {
       const analytics = runInit();
-
       const user = analytics.getUser();
 
       expect(user.uid).toExist();
@@ -60,8 +45,8 @@ describe('init', () => {
     const getQueryParams = (link: string) => qs.parse(url.parse(link).query);
     const key = 'testKey';
     const getUser = () => ({
-      uid: window.localStorage.getItem('_findify_uniq'),
-      sid: window.localStorage.getItem('_findify_visit'),
+      uid: store.get('_findify_uniq'),
+      sid: store.get('_findify_visit'),
       exist: 'true',
       persist: 'false',
     });
@@ -69,8 +54,7 @@ describe('init', () => {
     it('should not send event if user was disabled cookies and localStorage', (done) => {
       const analytics = runInit();
 
-      delete window.document.cookie;
-      (window as any).localStorage = undefined;
+      store.clearAll();
 
       fauxJax.on('request', () => {
         done(new Error('Request was sent'));

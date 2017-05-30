@@ -1,8 +1,8 @@
-import { readCookie, writeCookie } from '../modules/storage';
+import * as storage from '../modules/storage';
 import { cleanObject } from '../utils/cleanObject';
 import env = require('../env');
 
-const isEvent = (name, node) => node && node.getAttribute('data-findify-event') === name;
+const isEvent = (name, node) => node && node.getAttribute && node.getAttribute('data-findify-event') === name;
 const getEventNode = (name, context) => context.querySelector(`[data-findify-event="${name}"]`);
 const getFilterNodes = (context) => context.querySelectorAll(`[data-findify-filter]`);
 
@@ -78,11 +78,11 @@ const getPurchaseFallbackData = (node) => {
 };
 
 const writeClickThroughCookie = (type, request) => {
-  writeCookie(3E4, env.storage.ctKey, `${type}#${JSON.stringify(request)}`);
+  storage.write(env.storage.ctKey, `${type}#${JSON.stringify(request)}`);
 };
 
 const readClickThroughCookie = () => {
-  const data = readCookie(env.storage.ctKey);
+  const data = storage.read(env.storage.ctKey);
 
   if (!data) {
     return;
@@ -97,7 +97,7 @@ const readClickThroughCookie = () => {
 };
 
 const clearClickThroughCookie = () => {
-  writeCookie(0, env.storage.ctKey);
+  storage.write(env.storage.ctKey);
 };
 
 export {
