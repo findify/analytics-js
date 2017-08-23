@@ -17,8 +17,10 @@ var config = {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(env),
-      'process.env.FINDIFY_ENV': JSON.stringify(process.env.FINDIFY_ENV),
+      'process.env': {
+        NODE_ENV: JSON.stringify(env),
+        FINDIFY_ENV: JSON.stringify(process.env.FINDIFY_ENV),
+      }
     }),
   ],
   resolve: {
