@@ -2,10 +2,12 @@
   "compilerOptions": {
     "allowJs": true,
     "outDir": "./lib",
-    "noImplicitAny": false,
-    "skipLibCheck": true,
     "module": "commonjs",
-    "target": "es5"
+    "target": "es5",
+    "lib": ["es6", "es2017", "dom"],
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "skipLibCheck": true
   },
   "files": [
     "./modules.d.ts",
