@@ -12,7 +12,7 @@ var config = {
   },
   output: {
     library: 'FindifyAnalytics',
-    libraryTarget: 'umd',
+    libraryTarget: 'window',
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
