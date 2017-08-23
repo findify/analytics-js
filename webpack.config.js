@@ -5,9 +5,9 @@ var webpack = require('webpack');
 var env = process.env.NODE_ENV;
 var config = {
   module: {
-    loaders: [{
+    rules: [{
       test: /\.ts$/,
-      loader: 'ts-loader',
+      use: 'ts-loader',
     }],
   },
   output: {
@@ -22,7 +22,7 @@ var config = {
     }),
   ],
   resolve: {
-    extensions: ['', '.ts', '.js'],
+    extensions: ['.ts', '.js'],
   },
 };
 

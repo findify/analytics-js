@@ -1,6 +1,6 @@
-import * as reduce from 'lodash/reduce';
-import * as assign from 'lodash/assign';
-import * as isNull from 'lodash/isNull';
+import reduce = require('lodash/reduce');
+import assign = require('lodash/assign');
+import isNull = require('lodash/isNull');
 
 function cleanObject(obj: InputObject) {
   return reduce(obj, (acc: InputObject, value: any, key: string) => (

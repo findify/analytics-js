@@ -1,4 +1,4 @@
-import * as isEqual from 'lodash/isEqual';
+import isEqual = require('lodash/isEqual');
 
 import * as storage from './modules/storage';
 import { requestApi } from './modules/requestApi';
