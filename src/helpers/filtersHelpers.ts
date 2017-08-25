@@ -13,7 +13,7 @@ const convertFilterNodesToArray = (nodes): FiltersData[] => {
     try {
       values = JSON.parse(value);
     } catch(e) {
-      values = [{ value: value.split(',').split('>').map(v => v && v.trim()) }];
+      values = [{ value: value.split(/,|>/).map(v => v && v.trim()) }];
     }
 
     return { name, values };
