@@ -19,7 +19,7 @@
     "build:umd:min-staging": "cross-env FINDIFY_ENV=staging NODE_ENV=production webpack src/index.ts dist/staging/findify-analytics.min.js",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "build-staging": "npm run build:umd-staging && npm run build:umd:min-staging",
-    "prepare": "npm run clean && npm test && npm run build",
+    "prepublish": "npm run clean && npm test && npm run build",
     "preversion": "npm run check && git checkout master && git merge develop",
     "postversion": "git push && git push --tags && git checkout develop && git merge master && git push"
   },
@@ -30,7 +30,7 @@
     "lib",
     "index.d.ts"
   ],
-  "repository": "https://github.com/findify/findify-analytics.git",
+  "repository": "https://github.com/findify/analytics-js.git",
   "dependencies": {
     "js-cookie": "^2.1.4",
     "lodash": "^4.17.4",
