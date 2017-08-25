@@ -8,14 +8,15 @@ const convertFilterNodesToArray = (nodes): FiltersData[] => {
   .map(node => {
     const name = node.getAttribute(NAME_SELECTOR);
     const value = node.getAttribute(VALUE_SELECTOR);
+    let values = void 0;
+
     try {
-      JSON.parse(value);
+      values = JSON.parse(value);
     } catch(e) {
-      console.error(`Please provide a valid JSON object to ${VALUE_SELECTOR}`);
-      return void 0;
+      values = [{ value: value.split(',').split('>').map(v => v && v.trim()) }];
     }
 
-    return { name, values: JSON.parse(value) };
+    return { name, values };
   })
   .filter(i => !!i);
 }
