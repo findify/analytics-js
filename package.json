@@ -19,8 +19,7 @@
     "build:umd:min-staging": "cross-env FINDIFY_ENV=staging NODE_ENV=production webpack src/index.ts dist/staging/findify-analytics.min.js",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "build-staging": "npm run build:umd-staging && npm run build:umd:min-staging",
-    "prepublish": "npm run build",
-    "prepare": "npm run clean",
+    "prepare": "npm run clean && npm test && npm run build",
     "preversion": "npm run check && git checkout master && git merge develop",
     "postversion": "git push && git push --tags && git checkout develop && git merge master && git push"
   },
