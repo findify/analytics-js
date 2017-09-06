@@ -53,12 +53,17 @@ const readCart = () => storage.read(cartKey);
 const writeCart = (data) => storage.write(cartKey, data);
 
 const init = (cfg: Config): Client => {
-  const config = { ...cfg, platform: cfg.platform || {} };
+  const config = {
+    ...cfg,
+    events: cfg.events || {},
+    platform: cfg.platform || {}
+  };
 
   validateInitParams(config);
 
   const initialSid = readSid();
   const initialUid = readUid();
+
   let idsData = ({} as IdsData);
   let filtersData = ([] as FiltersData[]);
 
@@ -79,6 +84,8 @@ const init = (cfg: Config): Client => {
     },
 
     sendEvent(name: EventName, request?, endpoint?: string) {
+      if (config.events[name] === false) return;
+
       validateSendEventParams(name, request, config);
 
       const user = this.getUser();
