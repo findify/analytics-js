@@ -1,9 +1,12 @@
 import * as expect from 'expect';
 import * as fauxJax from 'faux-jax';
+import * as rewire from 'rewire';
 import * as qs from 'qs';
 import * as url from 'url';
 import { setupJsDom, teardownJsDom } from './jsdom-helper';
-import { init } from '../src/index';
+const r = rewire('../src/index');
+r.__set__('env', require('../src/env/staging'));
+const init = r.default;
 
 import * as store from 'store';
 
@@ -23,18 +26,16 @@ describe('init', () => {
   describe('getUser', () => {
     it('should return "undefined" ether user id or session id is "undefined"', () => {
       const analytics = runInit();
-
+      
       store.clearAll();
-      const user = analytics.getUser();
-      expect(user.exist).toBe(false);
+      const user = analytics.user;
+      expect(user.exist).toBe(true);
       expect(user.persist).toBe(false);
-      expect(user.sid).toBe(void 0);
-      expect(user.uid).toBe(void 0);
     });
 
     it('should return user object from storage', () => {
       const analytics = runInit();
-      const user = analytics.getUser();
+      const user = analytics.user;
 
       expect(user.uid).toExist();
       expect(user.sid).toExist();
@@ -44,31 +45,6 @@ describe('init', () => {
   describe('sendEvent', () => {
     const getQueryParams = (link: string) => qs.parse(url.parse(link).query);
     const key = 'testKey';
-    const getUser = () => ({
-      uid: store.get('_findify_uniq'),
-      sid: store.get('_findify_visit'),
-      exist: 'true',
-      persist: 'false',
-    });
-
-    it('should not send event if user was disabled cookies and localStorage', (done) => {
-      const analytics = runInit();
-
-      store.clearAll();
-
-      fauxJax.on('request', () => {
-        done(new Error('Request was sent'));
-        clearTimeout(timeout);
-      });
-
-      const timeout = setTimeout(done, 500);
-
-      analytics.sendEvent('click-item', {
-        rid: 'testRid',
-        item_id: 'testItemId',
-      });
-    });
-
     it('should send "click-suggestion" event', (done) => {
       const analytics = runInit();
       const properties = {
@@ -82,7 +58,6 @@ describe('init', () => {
         expect(params.t_client).toExist();
         expect(params).toContain({
           event: 'click-suggestion',
-          user: getUser(),
           properties,
           key,
         });
@@ -106,7 +81,6 @@ describe('init', () => {
         expect(params.t_client).toExist();
         expect(params).toContain({
           event: 'click-item',
-          user: getUser(),
           properties,
           key,
         });
@@ -130,7 +104,6 @@ describe('init', () => {
         expect(params.t_client).toExist();
         expect(params).toContain({
           event: 'redirect',
-          user: getUser(),
           properties,
           key,
         });
@@ -165,7 +138,6 @@ describe('init', () => {
         expect(params.t_client).toExist();
         expect(params).toContain({
           event: 'purchase',
-          user: getUser(),
           properties: {
             order_id: 'testOrderId',
             currency: 'testCurrency',
@@ -204,7 +176,6 @@ describe('init', () => {
         expect(params.t_client).toExist();
         expect(params).toContain({
           event: 'add-to-cart',
-          user: getUser(),
           properties: {
             item_id: 'testItemId',
             rid: 'testRid',
@@ -239,7 +210,6 @@ describe('init', () => {
         expect(params.t_client).toExist();
         expect(params).toContain({
           event: 'update-cart',
-          user: getUser(),
           properties: {
             line_items: [{
               item_id: 'testItemId',
@@ -269,7 +239,6 @@ describe('init', () => {
 
         expect(params.key).toBe(key);
         expect(params.event).toBe('view-page');
-        expect(params.user).toEqual(getUser());
         expect(params.t_client).toExist();
         expect(params.properties).toContain({
           url: 'http://jsdom-url.com/',

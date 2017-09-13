@@ -59,5 +59,5 @@ declare module "findify-analytics" {
     sendEvent(type: 'view-page', request?: ViewPageEventRequest),
   };
 
-  function init(config: Config): Client;
+  function(config: Config): Client;
 }

@@ -4,6 +4,7 @@ type User = {
   exist: boolean,
   persist: boolean
 };
+
 type Config = {
   key: string,
   events?: {},
@@ -104,18 +105,11 @@ type EventName = (
 );
 
 type Client = {
-  getUser(): User,
-  sendEvent(name: 'click-suggestion', request: ClickSuggestionPublicEventRequest),
-  sendEvent(name: 'click-item', request: ClickItemPublicEventRequest),
-  sendEvent(name: 'redirect', request: RedirectPublicEventRequest),
-  sendEvent(name: 'purchase', request: PurchasePublicEventRequest),
-  sendEvent(name: 'add-to-cart', request: AddToCartPublicEventRequest),
-  sendEvent(name: 'update-cart', request: UpdateCartPublicEventRequest),
-  sendEvent(name: 'view-page', request?: ViewPagePublicEventRequest),
-  listen(context?): void,
-  getIdsData(): IdsData,
-  getFiltersData(): FiltersData[],
-  writeClickThroughCookie(type: string, request: any): void,
+  user: User,
+  sendEvent(type: string, request?: any, useCookie?: boolean, endpoint?: string): void | Promise<{}>,
+  listen(callback?): void,
+  state(): any,
+  init(): void,
 };
 
 export {

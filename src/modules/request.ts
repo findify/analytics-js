@@ -3,8 +3,13 @@ import { User, EventName, InternalEventRequest } from '../types';
 
 import env = require('../env');
 
-function requestApi(data: Data, endpoint?: string) {
-  return new Promise((resolve, reject) => {
+
+const makeSrc = (queryString: string, endpoint?: string) => !endpoint
+  && env.searchApi.url + '/feedback?' + queryString
+  || `${endpoint}?${queryString}`;
+
+const request = (data: any, endpoint?: string) =>
+  new Promise((resolve, reject) => {
     const queryString = qs.stringify({ ...data, t_client: Date.now() });
     const image = window.document.createElement('img');
 
@@ -13,20 +18,12 @@ function requestApi(data: Data, endpoint?: string) {
 
     image.src = makeSrc(queryString, endpoint);
   });
-}
 
-function makeSrc(queryString: string, endpoint?: string) {
-  if (!endpoint) return env.searchApi.url + '/feedback?' + queryString;
-  return endpoint + '?' + queryString;
-}
+export default { request };
 
 type Data = {
   key: string,
   user: User,
-  event: EventName,
+  event: string,
   properties: InternalEventRequest,
-};
-
-export {
-  requestApi,
 };

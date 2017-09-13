@@ -4,14 +4,13 @@ import * as rewire from 'rewire';
 import * as qs from 'qs';
 import * as url from 'url';
 import { setupJsDom, teardownJsDom } from '../jsdom-helper';
+const r = rewire('../../src/modules/request');
 
-const r = rewire('../../src/modules/requestApi');
+const request = r.__get__('request');
 
-const requestApi = r.__get__('requestApi');
-
-describe('requestApi', () => {
+describe('request', () => {
   const getQueryParams = (link: string) => qs.parse(url.parse(link).query);
-  const makeGenericRequest = () => requestApi({
+  const makeGenericRequest = () => request({
     event: 'click-item',
     properties: {
       item_id: 'itemId',

@@ -1,31 +1,19 @@
 import isEqual = require('lodash/isEqual');
+import defaults = require('lodash/defaults');
+import once = require('lodash/once');
 
-import * as storage from './modules/storage';
-import { requestApi } from './modules/requestApi';
-import { generateId } from './utils/generateId';
-import { cleanObject } from './utils/cleanObject';
+import { createChangeEmitter } from 'change-emitter';
+import storage from './modules/storage';
+import api from './modules/request';
 import { validateSendEventParams, validateInitParams } from './validations';
 
 import {
-  isEvent,
-  getEventNode,
-  getFilterNodes,
-  getClickSuggestionData,
-  getClickItemData,
-  getAddToCartData,
-  getViewPageData,
-  getPurchaseData,
-  getUpdateCartData,
-  getLineItemsData,
-  getViewPageFallbackData,
-  getPurchaseFallbackData,
-  writeClickThroughCookie,
-  readClickThroughCookie,
-  clearClickThroughCookie,
-} from './helpers/listenHelpers';
+  getEventsOnPage,
+  getDeprecatedEvents
+} from './helpers/eventsHelpers';
 
 import {
-  convertFilterNodesToArray
+  getFiltersOnPage
 } from './helpers/filtersHelpers';
 
 import {
@@ -41,183 +29,73 @@ import {
 
 import env = require('./env');
 
-const uidKey = env.storage.uniqKey;
-const sidKey = env.storage.visitKey;
-const cartKey = env.storage.cartKey;
+const emitter = createChangeEmitter();
+const state: any = {};
 
-const readUid = () => storage.read(uidKey);
-const readSid = () => storage.read(sidKey);
-const writeUid = () => storage.write(uidKey, generateId(), true);
-const writeSid = () => storage.write(sidKey, generateId());
-const readCart = () => storage.read(cartKey);
-const writeCart = (data) => storage.write(cartKey, data);
+const getUser = () => ({
+  uid: storage.uid,
+  sid: storage.sid,
+  persist: storage.persist,
+  exist: storage.exist
+});
 
-const init = (cfg: Config): Client => {
-  const config = {
-    ...cfg,
-    events: cfg.events || {},
-    platform: cfg.platform || {}
+const sendEventCreator = ({
+  events,
+  key,
+}) => (
+  event: string,
+  request: any = {},
+  useCookie?: boolean,
+  endpoint?: string
+) => {
+  if (events[event] === false) return;
+
+  if (useCookie) return storage.memoize(event, request);
+
+  const properties = event === 'view-page' ? {
+    ...request,
+    url: window.location.href,
+    ref: window.document.referrer,
+    width: window.screen.width,
+    height: window.screen.height,
+  } : request;
+
+  emitter.emit(event, properties);
+
+  return api.request({ key, event, properties, user: getUser() }, endpoint)
+};
+
+
+const initializeCreator = (root, sendEvent, { platform }) => (context = root) => {
+  state.events = {
+    ...getDeprecatedEvents(context),
+    ...getEventsOnPage(context),
+    ...storage.memorized
   };
 
-  validateInitParams(config);
+  state.filters = getFiltersOnPage(context);
 
-  const initialSid = readSid();
-  const initialUid = readUid();
+  if (!state.events['view-page']) {
+    sendEvent('view-page', {})
+  }
 
-  let idsData = ({} as IdsData);
-  let filtersData = ([] as FiltersData[]);
+  return Object.keys(state.events).forEach((key: string) => {
+    let endpoint;
+    if (key === 'update-cart' && isEqual(state.events[key], storage.cart)) return;
+    if (key === 'purchase' && platform.bigcommerce) endpoint = env.bigcommerceTrackingUrl;
+    return sendEvent(key, state.events[key], false, endpoint);
+  });
+};
 
-  if (!initialSid) writeSid();
-  if (!initialUid) writeUid();
-
+export default (cfg: Config, context = document): Client => {
+  const config = defaults({ events: {}, platform: {} }, cfg);
+  const sendEvent = sendEventCreator(config);
+  const init = initializeCreator(context, sendEvent, config);
   return {
-    getUser(): User {
-      const uid = readUid();
-      const sid = readSid();
-
-      return {
-        uid,
-        sid,
-        exist: !!(uid && sid),
-        persist: !!(initialSid && initialUid)
-      }
-    },
-
-    sendEvent(name: EventName, request?, endpoint?: string) {
-      if (config.events[name] === false) return;
-
-      validateSendEventParams(name, request, config);
-
-      const user = this.getUser();
-      const { key } = config;
-
-      if (!user.exist) return;
-
-      const properties = name === 'view-page' ? {
-        ...request,
-        url: window.location.href,
-        ref: window.document.referrer,
-        width: window.screen.width,
-        height: window.screen.height,
-      } : request;
-
-      return requestApi({
-        key,
-        user,
-        properties: (cleanObject(properties) as InternalEventRequest),
-        event: name,
-      }, endpoint);
-    },
-
-    listen(context?) {
-      const node = context || document;
-
-      node.addEventListener('click', (e) => {
-        const target = e.target;
-
-        if (isEvent('click-suggestion', target)) {
-          return writeClickThroughCookie('click-suggestion', getClickSuggestionData(target));
-        }
-
-        if (isEvent('click-item', target)) {
-          return writeClickThroughCookie('click-item', getClickItemData(target));
-        }
-        
-        if (isEvent('add-to-cart', target)) {
-          return this.sendEvent('add-to-cart', getAddToCartData(target));
-        }
-      });
-
-      if (!context) {
-        const init = () => {
-          const viewPageNode = getEventNode('view-page', node);
-          const filterNodes = getFilterNodes(node);
-          const purchaseNode = getEventNode('purchase', node);
-          const updateCartNode = getEventNode('update-cart', node);
-          const viewPageFallbackNode = node.querySelector('.findify_page_product');
-          const purchaseFallbackNode = node.querySelector('.findify_purchase_order');
-
-          const clickThroughCookie = readClickThroughCookie();
-          const getItemsIds = (items) => items.map((item) => item.item_id);
-
-          if (clickThroughCookie) {
-            clearClickThroughCookie();
-
-            const { type, request } = clickThroughCookie;
-
-            this.sendEvent(type, request);
-          }
-
-          if (purchaseFallbackNode) {
-            const data = getPurchaseFallbackData(purchaseFallbackNode);
-            this.sendEvent('purchase', data,
-              config.platform.bigcommerce ? env.bigcommerceTrackingUrl : void 0
-            );
-          }
-
-          if (filterNodes.length) {
-            filtersData = convertFilterNodesToArray(filterNodes);
-          }
-
-          if (isEvent('view-page', viewPageNode) || viewPageFallbackNode) {
-            if (isEvent('view-page', viewPageNode)) {
-              const viewPageData = getViewPageData(viewPageNode);
-
-              idsData.item_id = viewPageData.item_id;
-
-              this.sendEvent('view-page', viewPageData);
-            }
-
-            if (viewPageFallbackNode) {
-              const viewPageData = getViewPageFallbackData(viewPageFallbackNode);
-
-              idsData.item_id = viewPageData.item_id;
-
-              this.sendEvent('view-page', viewPageData);
-            }
-          } else {
-            this.sendEvent('view-page', {});
-          }
-
-          if (isEvent('purchase', purchaseNode)) {
-            this.sendEvent('purchase', getPurchaseData(purchaseNode));
-          }
-
-          if (isEvent('update-cart', updateCartNode)) {
-            const updateCartData = getUpdateCartData(updateCartNode);
-            const itemsIds = getItemsIds(updateCartData.line_items);
-            const storageCart = readCart();
-            const isCartUpdated = !isEqual(storageCart, updateCartData);
-
-            idsData.item_ids = itemsIds;
-
-            if (isCartUpdated) {
-              this.sendEvent('update-cart', updateCartData);
-              writeCart(updateCartData);
-            }
-          }
-        };
-
-        if (['complete', 'loaded', 'interactive'].indexOf(document.readyState) > -1 && document.body) {
-          init();
-        } else {
-          document.addEventListener('DOMContentLoaded', init, false);
-        }
-      }
-    },
-
-    getIdsData() {
-      return idsData;
-    },
-
-    getFiltersData() {
-      return filtersData;
-    },
-
-    writeClickThroughCookie,
+    sendEvent,
+    init,
+    listen: emitter.listen,
+    get user(): User { return getUser() },
+    get state(): any { return state; }
   };
-}
-
-export {
-  init,
 }
