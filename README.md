@@ -1,4 +1,17 @@
 # Getting started
+
+## Dependencies
+
+```
+sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev
+```
+
+or on Mac OS with Homebrew:
+
+```
+brew install cairo
+```
+
 ## Installation
 ```
 npm install findify-analytics --save
