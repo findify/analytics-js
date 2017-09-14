@@ -1,6 +1,7 @@
 import isEqual = require('lodash/isEqual');
 import defaults = require('lodash/defaults');
 import once = require('lodash/once');
+import isFunction = require('lodash/isFunction');
 
 import { createChangeEmitter } from 'change-emitter';
 import storage from './modules/storage';
@@ -9,7 +10,8 @@ import { validateSendEventParams, validateInitParams } from './validations';
 
 import {
   getEventsOnPage,
-  getDeprecatedEvents
+  getDeprecatedEvents,
+  getEventData
 } from './helpers/eventsHelpers';
 
 import {
@@ -79,6 +81,12 @@ const initializeCreator = (root, sendEvent, { platform }) => (context = root) =>
     sendEvent('view-page', {})
   }
 
+  root.addEventListener('click', e => {
+    if (!e.target.dataset.findifyEvent) return;
+    const { event, ...rest } = getEventData(e.target);
+    sendEvent(event, rest, true);
+  });
+
   return Object.keys(state.events).forEach((key: string) => {
     let endpoint;
     if (key === 'update-cart' && isEqual(state.events[key], storage.cart)) return;
@@ -87,13 +95,15 @@ const initializeCreator = (root, sendEvent, { platform }) => (context = root) =>
   });
 };
 
-export default (cfg: Config, context = document): Client => {
-  const config = defaults({ events: {}, platform: {} }, cfg);
+export default (props: Config | Function, context = document): Client => {
+  if (isFunction(props)) return emitter.listen(props);
+
+  const config = defaults({ events: {}, platform: {} }, props);
   const sendEvent = sendEventCreator(config);
-  const init = initializeCreator(context, sendEvent, config);
+  const initialize = initializeCreator(context, sendEvent, config);
   return {
     sendEvent,
-    init,
+    initialize,
     listen: emitter.listen,
     get user(): User { return getUser() },
     get state(): any { return state; }

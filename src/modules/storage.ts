@@ -14,7 +14,7 @@ function generateId() {
   return str;
 }
 
-const { uidKey, sidKey, cartKey, ctKey }  = env.storage;
+const { uniqKey, visitKey, cartKey, ctKey }  = env.storage;
 
 function read(name: string): any {
   return store.get(name);
@@ -28,33 +28,34 @@ function write(name: string, value?: any, permanent?: boolean) {
 
 function createUid () {
   const id = generateId();
-  write(uidKey, id, true);
+  write(uniqKey, id, true);
   return id;
 };
 
 function createSid () {
   const id = generateId();
-  write(sidKey, generateId());
+  write(visitKey, generateId());
   return id;
 };
 
-const persist = !!(read(uidKey) && read(sidKey));
+const persist = !!(read(uniqKey) && read(visitKey));
 
 export default {
-  get uid () { return read(uidKey) || createUid() },
-  get sid () { return read(sidKey) || createSid() },
+  get uid () { return read(uniqKey) || createUid() },
+  get sid () { return read(visitKey) || createSid() },
   get cart() { return read(cartKey) },
   set cart(data) { write(cartKey, data) },
-  get exist() { return !!(read(uidKey) && read(sidKey) )},
+  get exist() { return !!(read(uniqKey) && read(visitKey) )},
 
   persist,
 
   memoize(type, request) {
-    write(ctKey, { type, request })
+    const data = read(ctKey);
+    write(ctKey, { ...data, [type]: request })
   },
 
   get memorized() {
-    const data = read(ctKey.storage.ctKey);
+    const data = read(ctKey);
     if (!data) { return {} };
     write(ctKey);
     return data;

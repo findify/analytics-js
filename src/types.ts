@@ -109,7 +109,7 @@ type Client = {
   sendEvent(type: string, request?: any, useCookie?: boolean, endpoint?: string): void | Promise<{}>,
   listen(callback?): void,
   state(): any,
-  init(): void,
+  initialize(): void,
 };
 
 export {
