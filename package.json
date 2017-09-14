@@ -26,7 +26,6 @@
   "author": "Findify <yourfriends@findify.io>",
   "license": "MIT",
   "files": [
-    "dist",
     "lib",
     "index.d.ts"
   ],
