@@ -36,7 +36,8 @@ export const getEventData = node => {
 
 export const getEventsOnPage = root =>
   nodeToArray(root.querySelectorAll('[data-findify-event]'))
-  .map(getEventData);
+  .map(getEventData)
+  .reduce((acc, { event, ...rest }) => ({ ...acc, [event]: rest }), {});
 
 export const getDeprecatedEvents = root => {
   const events = {};
