@@ -15,19 +15,9 @@ const normalizeClass = memoize(name => ({
   'order_number': 'order_id'
 }[name] || name));
 
-const getPropsFromChildren = nodeList => nodeToArray(nodeList).reduce((acc, element) => {
-  const data = normalizeKeys(element.dataset);
-  if (data.event === 'update-cart') {
-    return {
-      ...acc,
-      ...data,
-      line_items: nodeToArray(element.children).map(e => normalizeKeys(e.dataset))
-    }
-  }
-
-  return {
+const getPropsFromChildren = nodeList => nodeToArray(nodeList).reduce((acc, element) => ({
   ...acc,
-  ...data,
+  ...normalizeKeys(element.dataset),
   ...(!!element.className && {
     [normalizeClass(element.className)]: !element.children.length
       && element.innerText
@@ -36,10 +26,18 @@ const getPropsFromChildren = nodeList => nodeToArray(nodeList).reduce((acc, elem
         getPropsFromChildren(element.children)
       ]
   })
-}}, {});
+}), {});
 
 export const getEventData = node => {
   const ownProps = normalizeKeys(node.dataset);
+
+  if (ownProps.event === 'update-cart') {
+    return {
+      ...ownProps,
+      line_items: nodeToArray(node.children).map(e => normalizeKeys(e.dataset))
+    }
+  }
+
   const childrenProps = getPropsFromChildren(node.children);
   return { ...ownProps, ...childrenProps };
 };
