@@ -67,11 +67,6 @@ const sendEventCreator = ({
   return api.request({ key, event, properties, user: getUser() }, endpoint)
 };
 
-emitter.listen((event, props) => {
-  if (event !== 'update-cart') return;
-  storage.cart = props;
-});
-
 const initializeCreator = (root, sendEvent, { platform }) => (context = root) => {
   state.events = {
     ...getDeprecatedEvents(context),
@@ -93,7 +88,13 @@ const initializeCreator = (root, sendEvent, { platform }) => (context = root) =>
 
   return Object.keys(state.events).forEach((key: string) => {
     let endpoint;
-    if (key === 'update-cart' && isEqual(state.events[key], storage.cart)) return;
+    if (key === 'update-cart') {
+      if (isEqual(state.events[key], storage.cart)) {
+        return
+      } else {
+        storage.cart = state.events[key];
+      }
+    }
     if (key === 'purchase' && platform.bigcommerce) endpoint = env.bigcommerceTrackingUrl;
     return sendEvent(key, state.events[key], false, endpoint);
   });
