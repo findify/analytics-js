@@ -67,6 +67,10 @@ const sendEventCreator = ({
   return api.request({ key, event, properties, user: getUser() }, endpoint)
 };
 
+emitter.listen((event, props) => {
+  if (event !== 'update-cart') return;
+  storage.cart = props;
+});
 
 const initializeCreator = (root, sendEvent, { platform }) => (context = root) => {
   state.events = {
