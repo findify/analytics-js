@@ -95,7 +95,7 @@ const initializeCreator = (root, sendEvent, { platform }) => (context = root) =>
   });
 };
 
-export default (props: Config | Function, context = document): Client => {
+module.exports = (props: Config | Function, context = document): Client => {
   if (isFunction(props)) return emitter.listen(props);
 
   const config = defaults({ events: {}, platform: {} }, props);
