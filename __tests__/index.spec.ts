@@ -6,7 +6,7 @@ import * as url from 'url';
 import { setupJsDom, teardownJsDom } from './jsdom-helper';
 const r = rewire('../src/index');
 r.__set__('env', require('../src/env/staging'));
-const init = r.default;
+const init = r;
 
 import * as store from 'store';
 
