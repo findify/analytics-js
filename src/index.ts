@@ -42,7 +42,7 @@ const getUser = () => ({
 });
 
 const sendEventCreator = ({
-  events,
+  events = {},
   key,
 }) => (
   event: string,
@@ -67,7 +67,11 @@ const sendEventCreator = ({
   return api.request({ key, event, properties, user: getUser() }, endpoint)
 };
 
-const initializeCreator = (root, sendEvent, { platform }) => (context = root) => {
+const initializeCreator = (
+  root,
+  sendEvent,
+  { platform = {} }
+) => (context = root) => {
   state.events = {
     ...getDeprecatedEvents(context),
     ...getEventsOnPage(context),
@@ -103,7 +107,7 @@ const initializeCreator = (root, sendEvent, { platform }) => (context = root) =>
 module.exports = (props: Config | Function, context = document): Client => {
   if (isFunction(props)) return emitter.listen(props);
 
-  const config = defaults({ events: {}, platform: {} }, props);
+  const config = props;
   const sendEvent = sendEventCreator(config);
   const initialize = initializeCreator(context, sendEvent, config);
   return {
