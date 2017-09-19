@@ -42,7 +42,7 @@ const getUser = () => ({
 });
 
 const sendEventCreator = ({
-  events = {},
+  events,
   key,
 }) => (
   event: string,
@@ -70,7 +70,7 @@ const sendEventCreator = ({
 const initializeCreator = (
   root,
   sendEvent,
-  { platform = {} }
+  { platform }
 ) => (context = root) => {
   state.events = {
     ...getDeprecatedEvents(context),
@@ -107,7 +107,7 @@ const initializeCreator = (
 module.exports = (props: Config | Function, context = document): Client => {
   if (isFunction(props)) return emitter.listen(props);
 
-  const config = props;
+  const config = { events: {}, platform: {}, ...props };
   const sendEvent = sendEventCreator(config);
   const initialize = initializeCreator(context, sendEvent, config);
   return {
