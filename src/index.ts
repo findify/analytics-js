@@ -50,8 +50,6 @@ const sendEventCreator = ({
   useCookie?: boolean,
   endpoint?: string
 ) => {
-  if (events[event] === false) return;
-
   if (useCookie) return storage.memoize(event, request);
 
   const properties = event === 'view-page' ? {
@@ -70,14 +68,14 @@ const sendEventCreator = ({
 const initializeCreator = (
   root,
   sendEvent,
-  { platform }
+  { platform, events }
 ) => (context = root) => {
   state.events = {
     ...getDeprecatedEvents(context),
     ...getEventsOnPage(context),
     ...storage.memorized
   };
-
+  
   state.filters = getFiltersOnPage(context);
 
   if (!state.events['view-page']) {
@@ -92,6 +90,8 @@ const initializeCreator = (
 
   return Object.keys(state.events).forEach((key: string) => {
     let endpoint;
+    if (events[key] === false) return;
+
     if (key === 'update-cart') {
       if (isEqual(state.events[key], storage.cart)) {
         return
@@ -99,6 +99,7 @@ const initializeCreator = (
         storage.cart = state.events[key];
       }
     }
+
     if (key === 'purchase' && platform.bigcommerce) endpoint = env.bigcommerceTrackingUrl;
     return sendEvent(key, state.events[key], false, endpoint);
   });
