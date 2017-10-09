@@ -32,7 +32,7 @@ https://findify-assets-2bveeb6u8ag.netdna-ssl.com/analytics-js/findify-analytics
 ## Usage example
 
 ```javascript
-var findifyAnalytics = require('@findify/analytics');
+var findifyAnalytics = require('findify-analytics');
 
 // First, you need to initialize library:
 var client = findifyAnalytics({
